@@ -46,4 +46,22 @@ class Requestorder extends CI_Controller
         $this->load->view('requestorder/detailorder', $data);
         $this->load->view('homepage/layouts/footer', $data);
     }
+
+    public function get_form_tambah()
+    {
+        //ambil id berupa kode_ro dari view masukin ke URL segment
+        $id = $this->uri->segment(3);
+        $data = [
+            'title' => 'Detail Order',
+            'user' => $this->userModel->get_user_session(),
+            //olah kode_ro yang dari view masuk ke requestModel
+            'detail' => $this->requestModel->joinDetail(['kode_ro' => $id])
+        ];
+
+        $this->load->view('homepage/layouts/header', $data);
+        $this->load->view('homepage/layouts/sidebar', $data);
+        $this->load->view('homepage/layouts/topbar', $data);
+        $this->load->view('requestorder/detailorder', $data);
+        $this->load->view('homepage/layouts/footer', $data);
+    }
 }
