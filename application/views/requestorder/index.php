@@ -6,6 +6,8 @@
     <!-- Page Body -->
     <div class="card text-start">
         <div class="card-body">
+            <div><?= $this->session->flashdata('msg'); ?></div>
+            <div><a name="newrequest" id="newrequest" class="btn btn-primary" href="<?= base_url('requestorder/get_form_tambah'); ?>" role="button">Tambah Request</a></div>
             <div class="table-responsive-md">
                 <table class="table table-sm dataTable" id="myTable">
                     <thead align=center>

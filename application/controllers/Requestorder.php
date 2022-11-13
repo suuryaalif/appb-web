@@ -49,19 +49,27 @@ class Requestorder extends CI_Controller
 
     public function get_form_tambah()
     {
-        //ambil id berupa kode_ro dari view masukin ke URL segment
-        $id = $this->uri->segment(3);
+        if ($this->session->userdata('role_id') == 3) {
+
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Maaf Akses Terbatas!</strong> anda tidak diperkenankan menambah request.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button></div>');
+            redirect('requestorder');
+        }
         $data = [
-            'title' => 'Detail Order',
+            'title' => 'Form Request',
             'user' => $this->userModel->get_user_session(),
-            //olah kode_ro yang dari view masuk ke requestModel
-            'detail' => $this->requestModel->joinDetail(['kode_ro' => $id])
+            'kodeotomatis' => $this->requestModel->AutoCode(),
+            'detail' => $this->requestModel->get_all_detail()
         ];
 
         $this->load->view('homepage/layouts/header', $data);
         $this->load->view('homepage/layouts/sidebar', $data);
         $this->load->view('homepage/layouts/topbar', $data);
-        $this->load->view('requestorder/detailorder', $data);
+        $this->load->view('requestorder/tambahorder', $data);
         $this->load->view('homepage/layouts/footer', $data);
     }
 }

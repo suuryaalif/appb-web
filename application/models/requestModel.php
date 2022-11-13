@@ -16,4 +16,25 @@ class requestModel extends CI_Model
         $this->db->where($where);
         return $this->db->get()->result_array();
     }
+    public function AutoCode()
+    {
+        $this->db->select('RIGHT(request_order.kode_ro,3) as koderequest', FALSE);
+        $this->db->order_by('koderequest', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get('request_order');
+        if ($query->num_rows() <> 0) {
+            $data = $query->row();
+            $kode = intval($data->koderequest) + 1;
+        } else {
+            $kode = 1;
+        }
+        $batas = str_pad($kode, 3, "0", STR_PAD_LEFT);
+        $kodetampil = "PBGA" . $batas;
+        return $kodetampil;
+    }
+
+    public function get_all_detail()
+    {
+        return $this->db->get('detail_request')->result_array();
+    }
 }
