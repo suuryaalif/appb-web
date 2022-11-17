@@ -7,7 +7,7 @@
     <div class="card text-start">
         <div class="card-body">
             <div><?= $this->session->flashdata('msg'); ?></div>
-            <div><a name="newrequest" id="newrequest" class="btn btn-primary" href="<?= base_url('requestorder/get_form_tambah'); ?>" role="button">Tambah Request</a></div>
+            <div><a name="newrequest" id="newrequest" class="btn btn-primary" href="<?= base_url('requestorder/get_pre_request'); ?>" role="button">Tambah Request</a></div>
             <div class="table-responsive-md">
                 <table class="table table-sm dataTable" id="myTable">
                     <thead align=center>
@@ -32,7 +32,7 @@
                                 <td><?= $row['alasan_req'] ?></td>
                                 <td><?= $row['submit_date'] ?></td>
                                 <td><?= $row['status_pengajuan'] ?></td>
-                                <td><?= $row['nip_user'] ?></td>
+                                <td><?= $row['id_user'] ?></td>
                                 <td><a name="detail_order" id="detail_order" class="btn btn-info" href="<?= base_url('') ?>requestorder/get_id/<?= $row['kode_ro']; ?>" role="button"> Detail</a></td>
                                 <td><a name="edit_ro" id="edit_ro" class="btn fa fa-edit btn-success" href="<?= base_url('requestorder/edit_ro'); ?>" role="button"> Edit</a></td>
                                 <td><a name="hapus_ro" id="hapus_ro" class="btn far fa-trash-alt btn-danger" href="<?= base_url('requestorder/hapus_ro'); ?>" role="button"> Hapus</a></td>

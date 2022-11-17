@@ -15,6 +15,8 @@
     <link href="<?= base_url('assets'); ?>/sbadmin/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="<?= base_url('assets'); ?>/sbadmin/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url('assets'); ?>/sweetalert/dist/sweetalert2.min.css">
+    <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
+    <script src="<?= base_url('assets'); ?>/sbadmin/vendor/datatables/jquery.dataTables.min.js"></script>
 </head>
 
 <body id="page-top">
