@@ -51,12 +51,29 @@
                                             <?= form_error('password', '<small class="text-danger pl-3">', '</small>'); ?>
                                         </div>
                                         <div class="form-group row">
+                                            <input type="text" class="form-control form-control-user" id="alamat" name="alamat" placeholder="Alamat"><?= form_error('alamat', '<small class="text-danger pl-3">', '</small>'); ?>
+                                        </div>
+                                        <div class="form-group row">
+                                            <input type="text" class="form-control form-control-user" id="no_hp" name="no_hp" placeholder="Nomor Handphone">
+                                            <?= form_error('no_hp', '<small class="text-danger pl-3">', '</small>'); ?>
+                                        </div>
+                                        <div class="form-group row">
                                             <label>select role :</label>
                                             <select class="form-control" id="role" name="role" value="<?= set_value('role'); ?>">
                                                 <option value="1">admin purchasing</option>
                                                 <option value="2">user requestion</option>
                                                 <option value="3">user approval</option>
                                                 <option value="4">user payment order</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label>select division :</label>
+                                            <select class="form-control" id="id_divisi" name="id_divisi" value="<?= set_value('role'); ?>">
+                                                <option value="1">Keuangan</option>
+                                                <option value="2">Ops Kantor</option>
+                                                <option value="3">Ops Lapangan</option>
+                                                <option value="4">Umum</option>
+                                                <option value="5">Gudang</option>
                                             </select>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">

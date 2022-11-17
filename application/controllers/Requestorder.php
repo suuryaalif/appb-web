@@ -20,18 +20,25 @@ class Requestorder extends CI_Controller
     //ini fungsi menampilkan semua order berdasarkan nipnya
     public function index()
     {
+        $id_div = $this->session->userdata('id_divisi');
         if ($this->session->userdata('role_id') == 1) {
             $data = [
                 'title' => 'Request Order',
                 'user' => $this->userModel->get_user_session(),
-                'request' => $this->requestModel->get_all_request()
+                'request' => $this->requestModel->get_allRequest()
+            ];
+        } elseif ($this->session->userdata('role_id') == 3) {
+            $data = [
+                'title' => 'Request Order',
+                'user' => $this->userModel->get_user_session(),
+                'request' => $this->db->get_where('request_order', array('divisi' => $id_div))->result_array()
             ];
         } else {
             $where = $this->session->userdata('nip');
             $data = [
                 'title' => 'Request Order',
                 'user' => $this->userModel->get_user_session(),
-                'request' => $this->requestModel->get_request($where)
+                'request' => $this->requestModel->get_requestbyID($where)
             ];
         }
 
@@ -51,7 +58,10 @@ class Requestorder extends CI_Controller
             'title' => 'Detail Order',
             'user' => $this->userModel->get_user_session(),
             //olah kode_ro yang dari view masuk ke requestModel
-            'detail' => $this->requestModel->joinDetail(['kode_ro' => $id])
+            'request' => $this->requestModel->get_requestbyKode($id),
+            'detail' => $this->requestModel->joinDetail(['kode_ro' => $id]),
+            'user_req' => $this->requestModel->joinRequest(['kode_ro' => $id]),
+            'status' => $this->requestModel->joinStatus(['kode_order' => $id])
         ];
 
         $this->load->view('homepage/layouts/header', $data);
@@ -110,6 +120,8 @@ class Requestorder extends CI_Controller
         $this->load->view('requestorder/form_Fin_request', $data);
         $this->load->view('homepage/layouts/footer', $data);
     }
+
+
     //fungsi ini buat nambahin detail barang di temp table
     public function add_new_detail()
     {
@@ -156,6 +168,8 @@ class Requestorder extends CI_Controller
             redirect('requestorder/get_pre_request');
         }
     }
+
+
     //fungsi dibawah ini buat menghapus salah satu dari detail barang
     public function delete_detail()
     {
@@ -180,13 +194,34 @@ class Requestorder extends CI_Controller
     {
         $kode_ro = $this->uri->segment(3);
         $nip = $this->session->userdata('nip');
+        $id_div = $this->session->userdata('id_divisi');
+
+        $this->load->library('ciqrcode'); //pemanggilan library QR CODE
+        $config['cacheable']    = true; //boolean, the default is true
+        $config['cachedir']     = './assets/'; //string, the default is application/cache/
+        $config['errorlog']     = './assets/'; //string, the default is application/logs/
+        $config['imagedir']     = './assets/img/qr-sign/'; //direktori penyimpanan qr code
+        $config['quality']      = true; //boolean, the default is true
+        $config['size']         = '1024'; //interger, the default is 1024
+        $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
+        $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
+        $this->ciqrcode->initialize($config);
+
+        $image_name = $nip . '.png'; //buat name dari qr code sesuai dengan nim
+        $params['data'] = $nip; //data yang akan di jadikan QR CODE
+        $params['level'] = 'H'; //H=High
+        $params['size'] = 10;
+        $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets
+        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
 
         $data = [
             'kode_ro' => $this->input->post('kode_order', true),
             'alasan_req' => $this->input->post('alasan_req', true),
             'submit_date' => $this->input->post('submit_date', true),
             'status_pengajuan' => 'belum diproses',
-            'id_user' => $nip
+            'divisi' => $id_div,
+            'id_user' => $nip,
+            'qr_sign' => $image_name
         ];
 
         $this->requestModel->insert_request($data, 'request_order');
@@ -236,5 +271,11 @@ class Requestorder extends CI_Controller
         </button></div>');
 
         redirect('requestorder');
+    }
+
+
+    //fungsi menampilkan request order per divisi
+    public function approve_detail()
+    {
     }
 }

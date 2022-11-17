@@ -75,7 +75,6 @@
                         </div>
                 </form>
                 <hr>
-                <h3 class="text-center">Barang Request Order</h3>
                 <table class="table table-responsive-sm border-3" id="datatable">
                     <thead align=center>
                         <tr>

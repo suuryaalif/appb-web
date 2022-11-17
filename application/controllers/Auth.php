@@ -47,7 +47,9 @@ class Auth extends CI_Controller
                     'nama' => $user['nama'],
                     'nip' => $user['nip'],
                     'email' => $user['email'],
+                    'no_hp' => $user['no_hp'],
                     'role_id' => $user['role_id'],
+                    'id_divisi' => $user['id_divisi'],
                     'created_at' => $user['created_at']
                 ];
 
@@ -85,6 +87,14 @@ class Auth extends CI_Controller
             'numeric' => 'nip should be numeric'
         ]);
         $this->form_validation->set_rules('password', 'Password', 'required|trim');
+        $this->form_validation->set_rules('alamat', 'Alamat', 'required|min_length[10]', [
+            'min_length' => 'alamat terlalu pendek'
+        ]);
+        $this->form_validation->set_rules('no_hp', 'no_hp', 'required|numeric|min_length[8]|max_length[14]', [
+            'numeric' => 'masukan hanya angka untuk nomor handphone',
+            'min_length' => 'nomor handphone tidak valid',
+            'max_length' => 'nomor handphone tidak valid'
+        ]);
 
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Registration Account';
@@ -98,7 +108,10 @@ class Auth extends CI_Controller
                     $this->input->post('password'),
                     PASSWORD_DEFAULT
                 ),
+                'alamat_tinggal' => $this->input->post('alamat', true),
+                'no_hp' => $this->input->post('no_hp', true),
                 'role_id' => $this->input->post('role'),
+                'id_divisi' => $this->input->post('id_divisi', true),
                 'img_profile' => 'default.jpg',
                 'created_at' => time()
             ];

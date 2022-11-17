@@ -1,18 +1,31 @@
 <?php
+
+use LDAP\Result;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class requestModel extends CI_Model
 {
-    //fungsi mengambiil semua request
-    // public function get_all_request()
-    // {
-    //     return $this->db->get('request_order')->result_array();
-    // }
-    public function get_request($where)
+    public function get_allRequest()
+    {
+        return $this->db->get('request_order')->result_array();
+    }
+    //menampilkan request order berdasarkan id
+    public function get_requestbyID($where)
     {
         return $this->db->get_where('request_order', array('id_user' => $where))->result_array();
     }
 
+    public function get_requestbyDiv()
+    {
+        $id_div = $this->session->userdata('id_divisi');
+        $request = $this->db->get_where('request_order', array('divisi' => $id_div))->result_array();
+    }
+    //panggil berdasarkan kode order
+    public function get_requestbyKode($where)
+    {
+        return $this->db->get_where('request_order', array('kode_ro' => $where))->result_array();
+    }
 
     public function joinDetail($where)
     {
@@ -20,6 +33,25 @@ class requestModel extends CI_Model
         $this->db->from('request_order');
         $this->db->join('detail_request', 'detail_request.kode_order = request_order.kode_ro');
         $this->db->join('user', 'request_order.id_user = user.nip');
+        $this->db->where($where);
+        return $this->db->get()->result_array();
+    }
+
+    //fungsi join request order dengan user
+    public function joinRequest($where)
+    {
+        $this->db->from('request_order');
+        $this->db->join('user', 'user.nip = request_order.id_user');
+        $this->db->where($where);
+        return $this->db->get()->result_array();
+    }
+
+
+    //fungsi join request order dengan status
+    public function joinStatus($where)
+    {
+        $this->db->from('detail_request');
+        $this->db->join('status_pengajuan_detail', 'status_pengajuan_detail.id_status = detail_request.status_detail');
         $this->db->where($where);
         return $this->db->get()->result_array();
     }
@@ -57,11 +89,11 @@ class requestModel extends CI_Model
         return $this->db->get('temp_order')->result_array();
     }
 
+    //menambahkan kolom detail_request
     public function insert_detail($data, $table)
     {
         $this->db->insert($table, $data);
     }
-
 
     //fungsi menghapus satu baris pada temp_order
     public function delete_detail($id)
@@ -70,13 +102,11 @@ class requestModel extends CI_Model
         $this->db->delete('temp_order');
     }
 
-
     //measukan data ke tabel request_order
     public function insert_request($data, $table)
     {
         $this->db->insert($table, $data);
     }
-
 
     //memasukan seluruh kolom punya kode ro where dari temp order ke detail request
     public function post_detail($kode_ro)
