@@ -7,6 +7,7 @@
         <div class="card text-start">
             <div class="card-body">
                 <div class="table-responsive">
+                    <?= $this->session->flashdata('msg'); ?>
                     <?php foreach ($user_req as $det) : ?>
                         <div class="table-responsive-md">
                             <div class="justify-content-center col-md">
@@ -69,13 +70,17 @@
                                         <?php endforeach; ?>
                                         <!--sampe sini-->
                                         <td><img src="<?= base_url(); ?>assets/img/foto-order/<?= $row['img_order']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 80px"></td>
+                                        <!--disini ada validasi untuk mengecek apakah pengajuan sudah diberikan keputusan atau belum-->
                                         <td>
+                                            <!--kalau belum maka ada tombol approval/reject-->
                                             <?php
                                             if ($user['role_id'] == 3) { ?>
                                                 <?php if ($row['status_detail'] == 1) { ?>
-                                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                                                        Aksi
-                                                    </button>
+                                                    <a class="btn btn-success" href="<?= base_url('requestorder/approve_detail/'); ?><?= $row['id_detail']; ?>">approve
+                                                    </a>
+                                                    <a class="btn btn-danger" href="<?= base_url('requestorder/reject_detail/'); ?><?= $row['id_detail']; ?>">reject
+                                                    </a>
+                                                    <!--kalau sudah maka tombol yang muncul hanya informasi/tooltip-->
                                                 <?php } else { ?>
                                                     <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="anda sudah beri keputusan!"><i class="fas fa-info"></i></button>
                                                 <?php } ?>
@@ -101,23 +106,7 @@
             </div>
         </div>
     </div>
-    <!-- /.container-fluid -->
+</div>
+<!-- /.container-fluid -->
 </div>
 <!-- End of Main Content -->
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h6>silahkan konfirmasi pilihan dengan memasukan komentar</h6>
-                <form method="POST" action="">
-                    <input type="text" id="komentar_approval" name="komentar_approval" class="form-control">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Setujui</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>

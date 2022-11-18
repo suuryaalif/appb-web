@@ -274,8 +274,55 @@ class Requestorder extends CI_Controller
     }
 
 
-    //fungsi menampilkan request order per divisi
+    //fungsi approve detail
     public function approve_detail()
     {
+        $id = $this->uri->segment(3);
+        $kode = $this->db->select('kode_order')->from('detail_request')->where('id_detail', $id)->get()->row_array();
+        $kd = $kode['kode_order'];
+
+        $this->requestModel->approve_det($id);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Barang Telah Disetujui.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+
+        //ini di redirect ke halaman detail order lagi
+        redirect('requestorder/get_id/' . $kd);
+    }
+
+    //fungsi reject detail
+    public function reject_detail()
+    {
+        $id = $this->uri->segment(3);
+        $kode = $this->db->select('kode_order')->from('detail_request')->where('id_detail', $id)->get()->row_array();
+        $kd = $kode['kode_order'];
+
+        $this->requestModel->reject_det($id);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        Barang Telah Direject.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+
+        redirect('requestorder/get_id/' . $kd);
+    }
+
+
+    public function confirmation_approval()
+    {
+        $id = $this->uri->segment(3);
+        $data = [
+            'note_req' => $this->input->post('note_req', true),
+            'approval_time' => time(),
+            'status_pengajuan' => 'telah disetujui'
+        ];
+
+        $this->requestModel->update_ro($data, $id);
+
+        redirect('requestorder');
     }
 }

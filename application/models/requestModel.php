@@ -127,4 +127,27 @@ class requestModel extends CI_Model
         $last_row = $this->db->select('*')->from('request_order')->where('id_user', $where)->limit(1)->order_by('id_ro', "DESC");
         return $last_row->get()->result_array();
     }
+
+    //approve detail order
+    public function approve_det($id)
+    {
+        $this->db->set('status_detail', 3);
+        $this->db->where('id_detail', $id);
+        $this->db->update('detail_request');
+    }
+
+    //reject detail order
+    public function reject_det($id)
+    {
+        $this->db->set('status_detail', 2);
+        $this->db->where('id_detail', $id);
+        $this->db->update('detail_request');
+    }
+
+    //update data
+    public function update_ro($data, $id)
+    {
+        //update
+        $this->db->update('request_order', $data, array('id_ro' => $id));
+    }
 }
