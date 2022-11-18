@@ -144,10 +144,21 @@ class requestModel extends CI_Model
         $this->db->update('detail_request');
     }
 
-    //update data
-    public function update_ro($data, $id)
+    //approve RO
+    public function approve_ro($data, $id)
     {
         //update
+        $this->db->set('status_pengajuan', 'telah disetujui');
+        $this->db->where('id_ro', $id);
+        $this->db->update('request_order', $data, array('id_ro' => $id));
+    }
+
+    //reject RO
+    public function reject_ro($data, $id)
+    {
+        //update
+        $this->db->set('status_pengajuan', 'telah disetujui');
+        $this->db->where('id_ro', $id);
         $this->db->update('request_order', $data, array('id_ro' => $id));
     }
 }

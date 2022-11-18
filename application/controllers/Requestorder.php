@@ -311,17 +311,46 @@ class Requestorder extends CI_Controller
         redirect('requestorder/get_id/' . $kd);
     }
 
-
-    public function confirmation_approval()
+    //untuk approve request order
+    public function ro_approval()
     {
         $id = $this->uri->segment(3);
         $data = [
-            'note_req' => $this->input->post('note_req', true),
             'approval_time' => time(),
             'status_pengajuan' => 'telah disetujui'
         ];
 
-        $this->requestModel->update_ro($data, $id);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Permintaan Telah Disetujui.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+
+        $this->requestModel->approve_ro($data, $id);
+
+
+        redirect('requestorder');
+    }
+
+    //reject request order
+    public function ro_reject()
+    {
+        $id = $this->uri->segment(3);
+        $data = [
+            'approval_time' => time(),
+            'status_pengajuan' => 'tidak disetujui'
+        ];
+
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        Permintaan Telah Ditolak.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+
+        $this->requestModel->reject_ro($data, $id);
+
 
         redirect('requestorder');
     }

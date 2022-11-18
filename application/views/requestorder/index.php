@@ -39,12 +39,8 @@
                                     <?php if ($row['status_pengajuan'] == 'belum diproses') { ?>
                                         <td><a name="detail_order" id="detail_order" class="btn btn-info" href="<?= base_url('') ?>requestorder/get_id/<?= $row['kode_ro']; ?>" role="button"><i class="fas fa-info-circle"></i></a>
                                             <!--button modal approval dan reject-->
-                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal">
-                                                setujui
-                                            </button>
-                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
-                                                tolak
-                                            </button>
+                                            <a name="detail_order" id="detail_order" class="btn btn-success" href="<?= base_url('') ?>requestorder/ro_approval/<?= $row['id_ro']; ?>" role="button"><i class="fa fa-check"></i></a>
+                                            <a name="detail_order" id="detail_order" class="btn btn-danger" href="<?= base_url('') ?>requestorder/ro_reject/<?= $row['id_ro']; ?>" role="button"><i class="fa fa-times"></i></a>
                                             <!--btn-->
                                         </td>
                                     <?php } else { ?>
@@ -70,32 +66,3 @@
 </div>
 <!-- End of Main Content -->
 <!-- Modal Update-->
-<div class="modal" tabindex="-1" role="dialog" id="modal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-            </div>
-            <div class="modal-body">
-                <?php foreach ($request as $r) : ?>
-                    <form method="POST" action="<?= base_url('requestorder/confirmation_approval/') . $row['id_ro']; ?>">
-                    <?php endforeach; ?>
-                    <div class="form-group">
-                        <label for="exampleFormControlTextarea1">silahkan masukan catatan/alasan anda: </label>
-                        <textarea class="form-control" id="note_req" name="note_req" rows="3" required></textarea>
-                    </div>
-                    <p>dengan menyetujui anda tidak dapat merubah keputusan yang telah dilakukan, silahkan hubungi admin bila ingin dirubah</p>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" required>
-                        <label class="form-check-label" for="defaultCheck1">
-                            Setuju lanjutkan
-                        </label>
-                    </div>
-                    <div class=" mt-3 ml-5">
-                        <button type="submit" class="btn btn-primary  btn-user">Lanjutkan</button>
-                        <button type="button" class="btn btn-secondary  btn-user" data-dismiss="modal">Close</button>
-                    </div>
-                    </form>
-            </div>
-        </div>
-    </div>
-</div>
