@@ -29,10 +29,22 @@
 
     <!-- ini mengecek menu sesuai dengan role yang diberikan -->
     <?php if ($this->session->userdata('role_id') !== '4') : ?>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link" href="<?= base_url('requestorder'); ?>">
                 <i class="fas fa-tasks"></i>
                 <span>Request Order</span></a>
+        </li> -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fa-tasks"></i>
+                <span>Request Order</span>
+            </a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href=" <?= base_url('requestorder'); ?>">Data Request</a>
+                    <a class="collapse-item" href="<?= base_url('requestorder/get_pre_request'); ?>" id="newrequest">Create Request Order</a>
+                </div>
+            </div>
         </li>
     <?php endif; ?>
 

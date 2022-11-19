@@ -9,6 +9,7 @@
     <meta name="description" content="login_appb" />
     <meta name="author" content="SAR" />
     <title><?= $title; ?></title>
+    <link rel="icon" type="image/x-icon" href="<?= base_url('assets') ?>/img/c.ico" />
     <!-- Custom fonts for this template-->
     <link href="<?= base_url('assets'); ?>/sbadmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <!-- Custom styles for this template-->

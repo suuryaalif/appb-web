@@ -27,14 +27,41 @@ class requestModel extends CI_Model
         return $this->db->get_where('request_order', array('kode_ro' => $where))->result_array();
     }
 
-    public function joinDetail($where)
+    //panggil siapa approval
+    public function get_user_approval($div)
     {
-        //kita ambil nila dimana nilai tersebut merupakan kode yang nantinya di join dengan 2 table
-        $this->db->from('request_order');
-        $this->db->join('detail_request', 'detail_request.kode_order = request_order.kode_ro');
-        $this->db->join('user', 'request_order.id_user = user.nip');
-        $this->db->where($where);
+        $this->db->select('*');
+        $this->db->from('user');
+        $this->db->where('id_divisi', $div);
+        $this->db->where_in('role_id', 3);
         return $this->db->get()->result_array();
+    }
+
+    //fungis ngegabung 3 tabel
+    public function JoinDetail($kode_ro)
+    {
+        $this->db->select('*');
+        $this->db->from('request_order a');
+        $this->db->join('detail_request b', 'b.kode_order=a.kode_ro', 'left');
+        $this->db->join('status c', 'c.id_status=b.status_detail', 'left');
+        $this->db->where('a.kode_ro', $kode_ro);
+        $this->db->order_by('a.kode_ro', 'asc');
+        $query = $this->db->get();
+        if ($query->num_rows() != 0) {
+            return $query->result_array();
+        } else {
+            return false;
+        }
+    }
+
+    public function verify_status($kode_ro)
+    {
+        $status_array = array(3, 4, 5, 6, 7, 8);
+        $this->db->select('*');
+        $this->db->from('detail_request');
+        $this->db->where('kode_order', $kode_ro);
+        $this->db->where_in('status_detail', $status_array);
+        return $this->db->get();
     }
 
     //fungsi join request order dengan user
@@ -51,7 +78,7 @@ class requestModel extends CI_Model
     public function joinStatus($where)
     {
         $this->db->from('detail_request');
-        $this->db->join('status_pengajuan_detail', 'status_pengajuan_detail.id_status = detail_request.status_detail');
+        $this->db->join('status', 'status.id_status = detail_request.status_detail');
         $this->db->where($where);
         return $this->db->get()->result_array();
     }

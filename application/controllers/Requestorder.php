@@ -54,15 +54,22 @@ class Requestorder extends CI_Controller
     {
         //ambil id berupa kode_ro dari view masukin ke URL segment
         $id = $this->uri->segment(3);
+        $verify = $this->requestModel->verify_status($id);
+        $divisi = $this->session->userdata('id_divisi');
+        $usr_apr = $this->requestModel->get_user_approval($divisi);
         $data = [
             'title' => 'Detail Order',
             'user' => $this->userModel->get_user_session(),
             //olah kode_ro yang dari view masuk ke requestModel
             'request' => $this->requestModel->get_requestbyKode($id),
-            'detail' => $this->requestModel->joinDetail(['kode_ro' => $id]),
+            'detail' => $this->requestModel->joinDetail($id),
             'user_req' => $this->requestModel->joinRequest(['kode_ro' => $id]),
-            'status' => $this->requestModel->joinStatus(['kode_order' => $id])
+            'verify_status' => $verify->num_rows(),
+            'user_approve' => $usr_apr
         ];
+
+        // var_dump($data);
+        // die;
 
         $this->load->view('homepage/layouts/header', $data);
         $this->load->view('homepage/layouts/sidebar', $data);
@@ -156,7 +163,7 @@ class Requestorder extends CI_Controller
                 'qty_order' => $this->input->post('qty_order', true),
                 'sat_order' => $this->input->post('sat_order', true),
                 'img_order' => $gambar,
-                'status_detail' => 'belum di proses'
+                'status_detail' => '1'
             ];
             $this->requestModel->insert_detail($data, 'temp_order');
             $this->session->set_flashdata('msg', '
@@ -227,7 +234,7 @@ class Requestorder extends CI_Controller
         $this->requestModel->insert_request($data, 'request_order');
         $this->requestModel->post_detail($kode_ro);
         // $this->requestModel->delete_temp();
-        $this->requestModel->joinDetail(['kode_ro' => $kode_ro]);
+        $this->requestModel->joinDetail($kode_ro);
         $this->session->set_flashdata('msg', '
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>Satu langkah lagi!</strong> Pastikan anda mendownload/Mencetak Request Order Sebelum Kembali.

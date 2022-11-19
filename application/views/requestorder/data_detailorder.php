@@ -49,8 +49,8 @@
                                     <th>Deskripsi</th>
                                     <th>Jumlah Order</th>
                                     <th>Satuan</th>
-                                    <th>Status</th>
                                     <th>foto rekomendasi</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody align=center>
@@ -64,12 +64,8 @@
                                         <td><?= $row['desk_barang'] ?></td>
                                         <td><?= $row['qty_order'] ?></td>
                                         <td><?= $row['sat_order'] ?></td>
-                                        <!---nampilin setiap nama status table detail order-->
-                                        <?php foreach ($status as $st) : ?>
-                                            <td><?= $st['status_pengajuan'] ?></td>
-                                        <?php endforeach; ?>
-                                        <!--sampe sini-->
                                         <td><img src="<?= base_url(); ?>assets/img/foto-order/<?= $row['img_order']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 80px"></td>
+                                        <td><?= $row['status_info'] ?></td>
                                         <!--disini ada validasi untuk mengecek apakah pengajuan sudah diberikan keputusan atau belum-->
                                         <td>
                                             <!--kalau belum maka ada tombol approval/reject-->
@@ -94,17 +90,76 @@
                             </div>
                         </table>
                         <hr />
-                        <div class="col-md-3 ml-md-auto mb-3"><i>Dibuat Dan Diajukan Oleh</i></div>
-                        <div class="col-md-3 ml-md-auto mb-3">
-                            <img class="float right" src="<?= base_url(); ?>assets/img/qr-sign/<?= $det['qr_sign']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 120px">
+                        <div class="container text-center">
+                            <div class="row">
+                                <div class="col-sm m-2">
+                                    Diajukan Oleh :
+                                    <br />
+                                    <img class="" src="<?= base_url(); ?>assets/img/qr-sign/<?= $det['qr_sign']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 120px"><br />
+                                    <i><?= $det['nama']; ?></i>
+                                </div>
+                                <?php foreach ($request as $req) : ?>
+                                    <?php if ($req['status_pengajuan'] == 'telah disetujui') : { ?>
+                                            <?php foreach ($user_approve as $us) : ?>
+                                                <div class="col-sm m-2">
+                                                    Disetujui Oleh :
+                                                    <br />
+                                                    <img class="float right" src="<?= base_url(); ?>assets/img/qr-sign/<?= $us['nip']; ?>.png" style="max-width:100%; max-height: 100%; height: 100px; width: 120px"><br />
+                                                    <i><?= $us['nama']; ?></i>
+                                                </div>
+                                            <?php endforeach ?>
+                                        <?php }
+                                    else : { ?>
+                                            <i>belum disetujui</i>
+                                        <?php }
+                                    endif; { ?>
+                                    <?php } ?>
+                                <?php endforeach ?>
+                                <div class="col-sm m-2">
+                                    Admin Pruchasing :
+                                    <br />
+                                    <img class="float right" src="<?= base_url(); ?>assets/img/qr-sign/<?= $det['qr_sign']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 120px"><br />
+                                    <i>Admin Purchasing</i>
+                                </div>
+
+                            </div>
                         </div>
-                        <div class="col-md-3 ml-md-auto mb-3"><i><?= $det['nama']; ?></i>
-                        </div>
-                        <a name="kembali" id="kembali" class="btn btn-primary" href="<?= base_url('requestorder'); ?>" role="button">Kembali</a>
                     <?php endforeach; ?>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <a name="kembali" id="kembali" class="btn btn-primary" href="<?= base_url('requestorder'); ?>" role="button">Kembali</a>
+        </div>
+
+        <!-- tombol approval dan reject hanya bisa diakses oleh user approval -->
+        <?php if ($this->session->userdata('role_id') == 3) { ?>
+
+            <!-- validasi apakah ada salah satu isian dari list pengajuan yang disetujui/tidak -->
+            <?php if ($verify_status == 0) { ?>
+                <div class="col-md-auto">
+                    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="anda belum memberi keputusan / salah satu pengajuan harus disetujui">
+                        <i class="fas fa-check"></i> Approve Pengajuan
+                    </button>
+                </div>
+                <div class="col-md-auto">
+                    <a name="kembali" id="kembali" class="btn btn-danger" href="<?= base_url('requestorder'); ?>" role="button">Reject Pengajuan</a>
+                </div>
+            <?php } else { ?>
+                <div class="col-md-auto">
+                    <a name="kembali" id="kembali" class="btn btn-success" href="<?= base_url('requestorder'); ?>" role="button"><i class="fas fa-check"></i> Approve Pengajuan</a>
+                </div>
+                <div class="col-md-auto">
+                    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="anda salah satu pengajuan disetujui"><i class="fas fa-times"></i> Reject Pengajuan
+                    </button>
+                </div>
+            <?php } ?>
+        <?php } ?>
     </div>
 </div>
 <!-- /.container-fluid -->
