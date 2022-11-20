@@ -75,10 +75,6 @@
                             <td><?= $row['kode_ro'] ?></td>
                         </tr>
                         <tr>
-                            <th>Status Pengajuan</th>
-                            <td><?= $row['status_pengajuan'] ?></td>
-                        </tr>
-                        <tr>
                             <th>Dijukan Tanggal</th>
                             <td><?= date("d/m/Y-H/i/s" . $row['submit_date']) ?></td>
                         </tr>

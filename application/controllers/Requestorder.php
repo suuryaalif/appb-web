@@ -31,7 +31,7 @@ class Requestorder extends CI_Controller
             $data = [
                 'title' => 'Request Order',
                 'user' => $this->userModel->get_user_session(),
-                'request' => $this->db->get_where('request_order', array('divisi' => $id_div))->result_array()
+                'request' => $this->requestModel->get_requestbyDiv($id_div)
             ];
         } else {
             $where = $this->session->userdata('nip');
@@ -54,7 +54,8 @@ class Requestorder extends CI_Controller
     {
         //ambil id berupa kode_ro dari view masukin ke URL segment
         $id = $this->uri->segment(3);
-        $verify = $this->requestModel->verify_status($id);
+        $verify_empty = $this->requestModel->check_empty_status($id);
+        $verify_approved = $this->requestModel->check_approved_status($id);
         $divisi = $this->session->userdata('id_divisi');
         $usr_apr = $this->requestModel->get_user_approval($divisi);
         $data = [
@@ -64,7 +65,8 @@ class Requestorder extends CI_Controller
             'request' => $this->requestModel->get_requestbyKode($id),
             'detail' => $this->requestModel->joinDetail($id),
             'user_req' => $this->requestModel->joinRequest(['kode_ro' => $id]),
-            'verify_status' => $verify->num_rows(),
+            'verify_approved' => $verify_approved->num_rows(),
+            'verify_empty' => $verify_empty->num_rows(),
             'user_approve' => $usr_apr
         ];
 
@@ -203,32 +205,13 @@ class Requestorder extends CI_Controller
         $nip = $this->session->userdata('nip');
         $id_div = $this->session->userdata('id_divisi');
 
-        $this->load->library('ciqrcode'); //pemanggilan library QR CODE
-        $config['cacheable']    = true; //boolean, the default is true
-        $config['cachedir']     = './assets/'; //string, the default is application/cache/
-        $config['errorlog']     = './assets/'; //string, the default is application/logs/
-        $config['imagedir']     = './assets/img/qr-sign/'; //direktori penyimpanan qr code
-        $config['quality']      = true; //boolean, the default is true
-        $config['size']         = '1024'; //interger, the default is 1024
-        $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
-        $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
-        $this->ciqrcode->initialize($config);
-
-        $image_name = $nip . '.png'; //buat name dari qr code sesuai dengan nim
-        $params['data'] = $nip; //data yang akan di jadikan QR CODE
-        $params['level'] = 'H'; //H=High
-        $params['size'] = 10;
-        $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets
-        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
-
         $data = [
             'kode_ro' => $this->input->post('kode_order', true),
             'alasan_req' => $this->input->post('alasan_req', true),
             'submit_date' => $this->input->post('submit_date', true),
-            'status_pengajuan' => 'belum diproses',
+            'status_pengajuan' => 1,
             'divisi' => $id_div,
             'id_user' => $nip,
-            'qr_sign' => $image_name
         ];
 
         $this->requestModel->insert_request($data, 'request_order');
@@ -321,11 +304,7 @@ class Requestorder extends CI_Controller
     //untuk approve request order
     public function ro_approval()
     {
-        $id = $this->uri->segment(3);
-        $data = [
-            'approval_time' => time(),
-            'status_pengajuan' => 'telah disetujui'
-        ];
+        $this->requestModel->approve_ro();
 
         $this->session->set_flashdata('msg', '
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -334,20 +313,15 @@ class Requestorder extends CI_Controller
         <span aria-hidden="true">&times;</span>
         </button></div>');
 
-        $this->requestModel->approve_ro($data, $id);
-
-
+        // var_dump($id);
+        // die;
         redirect('requestorder');
     }
 
     //reject request order
     public function ro_reject()
     {
-        $id = $this->uri->segment(3);
-        $data = [
-            'approval_time' => time(),
-            'status_pengajuan' => 'tidak disetujui'
-        ];
+        $this->requestModel->reject_ro();
 
         $this->session->set_flashdata('msg', '
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -355,10 +329,41 @@ class Requestorder extends CI_Controller
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
         </button></div>');
-
-        $this->requestModel->reject_ro($data, $id);
-
-
         redirect('requestorder');
+    }
+
+    public function form_edit_ro()
+    {
+        $kode_ro = $this->uri->segment(3);
+        $data = [
+            'title' => 'Edit Request',
+            'user' => $this->userModel->get_user_session(),
+            //olah kode_ro yang dari view masuk ke requestModel
+            'request' => $this->requestModel->get_requestbyKode($kode_ro),
+            'detail' => $this->requestModel->joinDetail($kode_ro),
+            'user_req' => $this->requestModel->joinRequest(['kode_ro' => $kode_ro]),
+        ];
+
+        $this->load->view('homepage/layouts/header', $data);
+        $this->load->view('homepage/layouts/sidebar', $data);
+        $this->load->view('homepage/layouts/topbar', $data);
+        $this->load->view('requestorder/edit_request', $data);
+        $this->load->view('homepage/layouts/footer', $data);
+    }
+    public function form_edit_detail()
+    {
+        $id = $this->uri->segment(3);
+        $data = [
+            'title' => 'Edit Request',
+            'user' => $this->userModel->get_user_session(),
+            //olah kode_ro yang dari view masuk ke requestModel
+            'detail' => $this->requestModel->get_detailbyID($id),
+        ];
+
+        $this->load->view('homepage/layouts/header', $data);
+        $this->load->view('homepage/layouts/sidebar', $data);
+        $this->load->view('homepage/layouts/topbar', $data);
+        $this->load->view('requestorder/edit_detail', $data);
+        $this->load->view('homepage/layouts/footer', $data);
     }
 }

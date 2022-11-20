@@ -8,23 +8,48 @@ class requestModel extends CI_Model
 {
     public function get_allRequest()
     {
-        return $this->db->get('request_order')->result_array();
+        // return $this->db->get('request_order')->result_array();
+        $this->db->select('*');
+        $this->db->from('request_order');
+        $this->db->join('status', 'status.id_status = request_order.status_pengajuan');
+        return $this->db->get()->result_array();
     }
     //menampilkan request order berdasarkan id
     public function get_requestbyID($where)
     {
-        return $this->db->get_where('request_order', array('id_user' => $where))->result_array();
+        // return $this->db->get_where('request_order', array('id_user' => $where))->result_array();
+        $this->db->select('*');
+        $this->db->from('request_order');
+        $this->db->join('status', 'status.id_status = request_order.status_pengajuan');
+        $this->db->where('id_user', $where);
+        return $this->db->get()->result_array();
+    }
+    public function get_detailbyID($where)
+    {
+        // return $this->db->get_where('request_order', array('id_user' => $where))->result_array();
+        $this->db->select('*');
+        $this->db->from('detail_request');
+        $this->db->join('status', 'status.id_status = detail_request.status_detail');
+        $this->db->where('id_detail', $where);
+        return $this->db->get()->result_array();
     }
 
-    public function get_requestbyDiv()
+    public function get_requestbyDiv($id_div)
     {
-        $id_div = $this->session->userdata('id_divisi');
-        $request = $this->db->get_where('request_order', array('divisi' => $id_div))->result_array();
+        $this->db->select('*');
+        $this->db->from('request_order');
+        $this->db->join('status', 'status.id_status = request_order.status_pengajuan');
+        $this->db->where('divisi', $id_div);
+        return $this->db->get()->result_array();
     }
     //panggil berdasarkan kode order
     public function get_requestbyKode($where)
     {
-        return $this->db->get_where('request_order', array('kode_ro' => $where))->result_array();
+        $this->db->select('*');
+        $this->db->from('request_order');
+        $this->db->join('status', 'status.id_status = request_order.status_pengajuan');
+        $this->db->where('kode_ro', $where);
+        return $this->db->get()->result_array();
     }
 
     //panggil siapa approval
@@ -53,14 +78,22 @@ class requestModel extends CI_Model
             return false;
         }
     }
-
-    public function verify_status($kode_ro)
+    //ini fungsi validasi approvalnya ada yang belum di kasih gak?
+    public function check_empty_status($kode_ro)
     {
-        $status_array = array(3, 4, 5, 6, 7, 8);
         $this->db->select('*');
         $this->db->from('detail_request');
         $this->db->where('kode_order', $kode_ro);
-        $this->db->where_in('status_detail', $status_array);
+        $this->db->where_in('status_detail', 1);
+        return $this->db->get();
+    }
+    //ini fungsi validasi approvalnya ada yang disetujui gak?
+    public function check_approved_status($kode_ro)
+    {
+        $this->db->select('*');
+        $this->db->from('detail_request');
+        $this->db->where('kode_order', $kode_ro);
+        $this->db->where_in('status_detail', 3);
         return $this->db->get();
     }
 
@@ -172,20 +205,28 @@ class requestModel extends CI_Model
     }
 
     //approve RO
-    public function approve_ro($data, $id)
+    public function approve_ro()
     {
         //update
-        $this->db->set('status_pengajuan', 'telah disetujui');
-        $this->db->where('id_ro', $id);
-        $this->db->update('request_order', $data, array('id_ro' => $id));
+        $data = [
+            "status_pengajuan" => 3,
+            "note_ro" => $this->input->post('note_ro'),
+            "approval_time" => time()
+        ];
+        $this->db->where('id_ro', $this->input->post('id_ro'));
+        $this->db->update('request_order', $data);
     }
 
     //reject RO
-    public function reject_ro($data, $id)
+    public function reject_ro()
     {
         //update
-        $this->db->set('status_pengajuan', 'telah disetujui');
-        $this->db->where('id_ro', $id);
-        $this->db->update('request_order', $data, array('id_ro' => $id));
+        $data = [
+            "status_pengajuan" => 2,
+            "note_ro" => $this->input->post('note_ro'),
+            "approval_time" => time()
+        ];
+        $this->db->where('id_ro', $this->input->post('id_ro'));
+        $this->db->update('request_order', $data);
     }
 }
