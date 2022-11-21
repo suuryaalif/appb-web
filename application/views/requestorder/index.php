@@ -33,7 +33,7 @@
                                 <td><?= $row['submit_date'] ?></td>
                                 <td><?= $row['status_info'] ?></td>
                                 <td><?= $row['id_user'] ?></td>
-                                <td><a name="detail_order" id="detail_order" class="btn btn-info" href="<?= base_url('') ?>requestorder/get_id/<?= $row['kode_ro']; ?>" role="button"><i class="far fa-eye"></i> </a></td>
+                                <td><a name="detail_order" id="detail_order" class="btn btn-info" href="<?= base_url('') ?>requestorder/detail/<?= $row['kode_ro']; ?>" role="button"><i class="far fa-eye"></i> </a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

@@ -2,12 +2,10 @@
 <div class="container-fluid">
     <div class="ml-md-auto mb-2"><a class="btn btn-secondary" style="align-content:flex-end;" href="<?= base_url('requestorder/finish_request'); ?>" role="button">
             Kembali</a>
-        <a class="btn btn-secondary" style="align-content:flex-end;" href="#" role="button">
-            Print</a>
-        <a class="btn btn-secondary" style="align-content:flex-end;" href="#" role="button">
-            Pdf</a>
-        <a class="btn btn-secondary" style="align-content:flex-end;" href="#" role="button">
-            Excel</a>
+        <?php foreach ($request as $req) : ?>
+            <a class="btn btn-info" style="align-content:flex-end;" href="<?= base_url('requestorder/save_pdf/' . $req['kode_ro']); ?>" role="button">
+                Pdf</a>
+        <?php endforeach; ?>
     </div>
     <div class="card card-header">
         <h2 class="text-center mt-3">Request Order</h2>

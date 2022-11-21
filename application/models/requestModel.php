@@ -33,6 +33,15 @@ class requestModel extends CI_Model
         $this->db->where('id_detail', $where);
         return $this->db->get()->result_array();
     }
+    public function get_detailbyKode($where)
+    {
+        // return $this->db->get_where('request_order', array('id_user' => $where))->result_array();
+        $this->db->select('*');
+        $this->db->from('detail_request');
+        $this->db->join('status', 'status.id_status = detail_request.status_detail');
+        $this->db->where('kode_order', $where);
+        return $this->db->get()->result_array();
+    }
 
     public function get_requestbyDiv($id_div)
     {
@@ -49,6 +58,15 @@ class requestModel extends CI_Model
         $this->db->from('request_order');
         $this->db->join('status', 'status.id_status = request_order.status_pengajuan');
         $this->db->where('kode_ro', $where);
+        return $this->db->get()->result_array();
+    }
+
+    //cari data gambar
+    public function get_imagebyKode($where)
+    {
+        $this->db->select('img_order');
+        $this->db->from('detail_request');
+        $this->db->where('kode_order', $where);
         return $this->db->get()->result_array();
     }
 
@@ -156,7 +174,7 @@ class requestModel extends CI_Model
     }
 
     //fungsi menghapus satu baris pada temp_order
-    public function delete_detail($id)
+    public function delete_temp_detail($id)
     {
         $this->db->where('id', $id);
         $this->db->delete('temp_order');
@@ -228,5 +246,32 @@ class requestModel extends CI_Model
         ];
         $this->db->where('id_ro', $this->input->post('id_ro'));
         $this->db->update('request_order', $data);
+    }
+
+    //fungsi update data
+    public function update_detail($data, $id)
+    {
+        $this->db->where('id_detail', $id);
+        $this->db->update('detail_request', $data);
+    }
+
+    //fungsi update data
+    public function update_request($data, $id)
+    {
+        $this->db->where('kode_ro', $id);
+        $this->db->update('request_order', $data);
+    }
+
+    //fungsi delete detail data pada detail_request
+    public function delete_detail($kode_ro)
+    {
+        $this->db->where('kode_order', $kode_ro);
+        $this->db->delete('detail_request');
+    }
+    //fungsi delete request data pada request_order
+    public function delete_request($kode_ro)
+    {
+        $this->db->where('kode_ro', $kode_ro);
+        $this->db->delete('request_order');
     }
 }

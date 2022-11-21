@@ -153,10 +153,10 @@
         <?php if ($req['status_pengajuan'] == 1) { ?>
             <?php if ($this->session->userdata('role_id') == 1 or $this->session->userdata('role_id') == 2) { ?>
                 <div class="col-md-auto">
-                    <a name="kembali" id="kembali" class="btn btn-success" href="<?= base_url('requestorder/form_edit_ro/') . $req['kode_ro']; ?>" role="button">Edit</a>
+                    <a name="kembali" id="kembali" class="btn btn-success" href="<?= base_url('requestorder/get_data_edit/') . $req['kode_ro']; ?>" role="button">Edit</a>
                 </div>
                 <div class="col-md-auto">
-                    <a name="kembali" id="kembali" class="btn btn-danger" href="<?= base_url('requestorder'); ?>" role="button">Hapus</a>
+                    <a name="kembali" id="kembali" class="btn btn-danger" href="<?= base_url('requestorder/delete_req_data/' . $req['kode_ro']); ?>" role="button">Hapus</a>
                 </div>
             <?php } ?>
         <?php } ?>

@@ -57,6 +57,13 @@
                         <div class="form-group">
                             <input type="file" class="form-control" id="foto_order" name="foto_order" required>
                         </div>
+                        <?php
+                        if (isset($error)) {
+                            echo "ERROR UPLOAD : <br/>";
+                            print_r($error);
+                            echo "<hr/>";
+                        }
+                        ?>
                         <br>
                         <div class="text-center mt-3">
                             <button class="btn btn-success" type="submit"><i class=" fa fa-plus"> Tambah Barang</i>
@@ -102,7 +109,7 @@
                                 <td><?= $row['qty_order'] ?></td>
                                 <td><?= $row['sat_order'] ?></td>
                                 <td><img src="<?= base_url(); ?>assets/img/foto-order/<?= $row['img_order']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 80px"></td>
-                                <td><a class="btn btn-danger far fa-thrash-alt" href="<?= base_url('requestorder/delete_detail/'); ?><?= $row['id']; ?>"><i class="far fa-times-circle"> Hapus</i></a></td>
+                                <td><a class="btn btn-danger far fa-thrash-alt" href="<?= base_url('requestorder/delete_temp_detail/'); ?><?= $row['id']; ?>"><i class="far fa-times-circle"> Hapus</i></a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
