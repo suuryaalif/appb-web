@@ -1,203 +1,215 @@
-<!-- Begin Page Content -->
-<div>
-    <div class="container-fluid">
-        <!-- Page Heading -->
-        <h1 class="h3 mb-4 text-gray-800">Data <?= $title; ?></h1>
-        <!-- Page Body -->
-        <div class="card text-start">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <?= $this->session->flashdata('msg'); ?>
-                    <?php foreach ($user_req as $det) : ?>
-                        <div class="table-responsive-md">
-                            <div class="justify-content-center col-md">
-                                <h3 class="text-center col-sm">Request Order</h3>
-                                <h4 class="header text-center col-md">No. <?= $det['kode_ro']; ?>/<?= date("m/y", strtotime($det['submit_date'])); ?></h4>
-                            </div>
-                            <hr />
-                            <table class="table table-light col-5">
-                                <tbody>
-                                    <tr class="">
-                                        <th>Nama User</th>
-                                        <th>:</th>
-                                        <td scope="row" colspan="2"><?= $det['email']; ?></td>
-                                    </tr>
-                                    <tr class="">
-                                        <th>Tgl Pengajuan</th>
-                                        <th>:</th>
-                                        <td scope="row" colspan="2"><?= date("d-F-Y", strtotime($det['submit_date'])); ?></td>
-                                    </tr>
-                                    <tr class="">
-                                        <th>Status</th>
-                                        <th>:</th>
-                                        <?php foreach ($request as $req) : ?>
-                                            <td scope="row" colspan="2"><?= $req['status_info']; ?></td>
-                                        <?php endforeach; ?>
-                                    </tr>
-                                    <tr class="">
-                                        <th>Alasan Request</th>
-                                        <th>:</th>
-                                        <td scope="row" colspan="2"><?= $det['alasan_req']; ?></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+<div class="container-fluid">
+    <!--header-->
+    <h1 class="h3 mb-4 text-gray-800">Data <?= $title; ?></h1>
+    <div class="container">
+        <!--tombol aksi-->
+        <?php foreach ($request as $req) : ?>
+            <div id="tombol-aksi" class="row mb-3">
+                <!--==-tombol kembali===-->
+                <div class="col-md-auto">
+                    <a name="kembali" id="kembali" class="btn btn-primary" href="<?= base_url('requestorder'); ?>" role="button">Kembali</a>
+                </div>
+                <!--cek status pengajuan-->
+                <?php if ($req['status_pengajuan'] == 1) : ?>
+                    <!--cek role idnya 1&3-->
+                    <?php if ($this->session->userdata('role_id') == 1 or $this->session->userdata('role_id') == 2) : ?>
+                        <div class="col-sm-auto">
+                            <a class="btn btn-success" href="<?= base_url('requestorder/get_data_edit/') . $req['kode_ro']; ?>" role="button"><i class="fa fa-edit"></i>
+                                Edit</a>
                         </div>
-                        <hr />
-                        <table class="table table-sm dataTable-container" id="myTable">
-                            <thead align=center>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Jenis</th>
-                                    <th>Deskripsi</th>
-                                    <th>Jumlah Order</th>
-                                    <th>Satuan</th>
-                                    <th>foto rekomendasi</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody align=center>
-                                <?php $no = 0;
-                                foreach ($detail as $row) :
-                                    $no++;
-                                ?>
-                                    <tr>
-                                        <td><?= $no ?></td>
-                                        <td><?= $row['jenis_barang'] ?></td>
-                                        <td><?= $row['desk_barang'] ?></td>
-                                        <td><?= $row['qty_order'] ?></td>
-                                        <td><?= $row['sat_order'] ?></td>
-                                        <td><img src="<?= base_url(); ?>assets/img/foto-order/<?= $row['img_order']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 80px"></td>
-                                        <td><?= $row['status_info'] ?></td>
-                                        <!--disini ada validasi untuk mengecek apakah pengajuan sudah diberikan keputusan atau belum-->
-                                        <td>
-                                            <!--kalau belum maka ada tombol approval/reject-->
-                                            <?php
-                                            if ($user['role_id'] == 3) { ?>
-                                                <?php if ($row['status_detail'] == 1) { ?>
-                                                    <a class="btn btn-success" href="<?= base_url('requestorder/approve_detail/'); ?><?= $row['id_detail']; ?>">approve
-                                                    </a>
-                                                    <a class="btn btn-danger" href="<?= base_url('requestorder/reject_detail/'); ?><?= $row['id_detail']; ?>">reject
-                                                    </a>
-                                                    <!--kalau sudah maka tombol yang muncul hanya informasi/tooltip-->
-                                                <?php } else { ?>
-                                                    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="anda sudah beri keputusan!"><i class="fas fa-info"></i></button>
-                                                <?php } ?>
-                                            <?php } ?>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                            <div class="card">
-                                <tr class="">
-                            </div>
-                        </table>
-                        <hr />
-
-                        <!-- disini ada fungsi untuk mengatur kalau memang dia belum disetujui belum ada tanda tangan atasannya-->
-                        <div class="container text-center">
-                            <div class="row">
-                                <div class="col-sm m-2">
-                                    Diajukan Oleh :
-                                    <br />
-                                    <img class="" src="<?= base_url(); ?>assets/img/qr-sign/<?= $det['qr_sign']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 120px"><br />
-                                    <i><?= $det['nama']; ?></i>
-                                </div>
-                                <?php foreach ($request as $req) : ?>
-                                    <?php if ($req['status_pengajuan'] > 2) : { ?>
-                                            <?php foreach ($user_approve as $us) : ?>
-                                                <div class="col-sm m-2">
-                                                    Disetujui Oleh :
-                                                    <br />
-                                                    <img class="float right" src="<?= base_url(); ?>assets/img/qr-sign/<?= $us['nip']; ?>.png" style="max-width:100%; max-height: 100%; height: 100px; width: 120px"><br />
-                                                    <i><?= $us['nama']; ?></i>
-                                                </div>
-                                            <?php endforeach ?>
-                                        <?php }
-                                    else : { ?>
-                                            <?php foreach ($user_approve as $us) : ?>
-                                                <div class="col-sm m-2">
-                                                    Belum disetujui Oleh :
-                                                    <br class="mx-4" />
-                                                    <i><?= $us['nama']; ?></i>
-                                                </div>
-                                            <?php endforeach ?>
-                                        <?php }
-                                    endif; { ?>
-                                    <?php } ?>
-                                <?php endforeach ?>
-                                <div class="col-sm m-2">
-                                    Admin Pruchasing :
-                                    <br />
-                                    <img class="float right" src="<?= base_url(); ?>assets/img/qr-sign/<?= $det['qr_sign']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 120px"><br />
-                                    <i>Admin Purchasing</i>
-                                </div>
-                                <!--sampe sini-->
-                            </div>
+                        <div class="col-sm-auto">
+                            <a class="btn btn-danger" href="<?= base_url('requestorder/delete_req_data/' . $req['kode_ro']); ?>" role="button"><i class="fa fa-trash"></i>
+                                Hapus</a>
                         </div>
-                        <div class="container mt-4">
-                            <div class="col-sm-4 mt-">Catatan Dari Approval : </div>
-                            <div class="col-sm-6"><?= $row['note_ro']; ?></div>
-                        </div>
-                    <?php endforeach; ?>
+                        <!--cek role idnya 3-->
+                    <?php elseif ($this->session->userdata('role_id') == 3) : ?>
+                        <!--cek semuanya approve/reject-->
+                        <?php if ($verify_empty > 0) : ?>
+                            <div class="col-md-auto">
+                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="mohon beri keputusan pada masing-masing list">
+                                    <i class="fas fa-info"></i> info
+                                </button>
+                            </div>
+                            <!--seluruhnya ditolak-->
+                        <?php elseif ($verify_approved < 1) : ?>
+                            <div class="col-md-auto">
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectModal<?= $req['id_ro'] ?>">
+                                    Reject
+                                </button>
+                            </div>
+                        <?php else : ?>
+                            <!--ada 1 yg disetujui-->
+                            <div class="col-md-auto">
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#approveModal<?= $req['id_ro'] ?>">
+                                    Approve
+                                </button>
+                            </div>
+                            <div class="col-md-auto">
+                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="ada yang di approve tidak bisa reject">
+                                    Reject
+                                </button>
+                            </div>
+                        <?php endif; ?>
+                        <!--kalo ini buat role requestion,gak bisa edit statusnya sudah disubmit-->
+                    <?php endif; ?>
+                    <!-- tombol approval dan reject hanya bisa diakses oleh user approval -->
+                <?php elseif ($req['status_pengajuan'] >= 2) : ?>
+                    <div class="col-md-auto">
+                        <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="order telah melewati proses approval"><i class="fas fa-info"></i></button>
+                    </div>
+                <?php endif; ?>
+                <div class=" col-md-auto">
+                    <a name="kembali" id="kembali" class="btn btn-danger" href="<?= base_url('requestorder/save_pdf/' . $req['kode_ro']); ?>" role="button"><i class="fa fa-file-pdf"></i>Download</a>
                 </div>
             </div>
-        </div>
     </div>
-</div>
-<hr />
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <a name="kembali" id="kembali" class="btn btn-primary" href="<?= base_url('requestorder'); ?>" role="button">Kembali</a>
-        </div>
-        <?php if ($req['status_pengajuan'] == 1) { ?>
-            <?php if ($this->session->userdata('role_id') == 1 or $this->session->userdata('role_id') == 2) { ?>
-                <div class="col-md-auto">
-                    <a name="kembali" id="kembali" class="btn btn-success" href="<?= base_url('requestorder/get_data_edit/') . $req['kode_ro']; ?>" role="button">Edit</a>
-                </div>
-                <div class="col-md-auto">
-                    <a name="kembali" id="kembali" class="btn btn-danger" href="<?= base_url('requestorder/delete_req_data/' . $req['kode_ro']); ?>" role="button">Hapus</a>
-                </div>
-            <?php } ?>
-        <?php } ?>
+<?php endforeach; ?>
 
-        <!-- tombol approval dan reject hanya bisa diakses oleh user approval -->
-        <?php foreach ($request as $req) : ?>
-            <?php if ($req['status_pengajuan'] == 1) { ?>
-                <?php if ($this->session->userdata('role_id') == 3) { ?>
-                    <!-- validasi apakah ada salah satu isian dari list pengajuan yang belum disetujui/tolak -->
-                    <?php if ($verify_empty > 0) { ?>
-                        <div class="col-md-auto">
-                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="mohon beri keputusan pada masing-masing list">
-                                <i class="fas fa-info"></i> info
-                            </button>
-                        </div>
-                    <?php } elseif ($verify_approved < 1) { ?>
-                        <!-- validasi apakah ada salah satu isian dari list pengajuan yang disetujui-->
-                        <div class="col-md-auto">
-                            <!-- <a name="kembali" id="kembali" class="btn btn-danger" href="<?= base_url('requestorder/ro_reject/') . $req['id_ro']; ?>" role="button">Reject Pengajuan</a> -->
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectModal<?= $req['id_ro'] ?>">
-                                Reject
-                            </button>
-                        </div>
-                    <?php } else { ?>
-                        <div class="col-md-auto">
-                            <!-- <a name="kembali" id="kembali" class="btn btn-success" href="<?= base_url('requestorder/ro_approval/') . $req['id_ro']; ?>" role="button"><i class="fas fa-check"></i> Approve Pengajuan</a> -->
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#approveModal<?= $req['id_ro'] ?>">
-                                Approve
-                            </button>
-                        </div>
-                    <?php } ?>
-                <?php } ?>
-            <?php } else { ?>
-                <div class="col-md-auto">
-                    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="order telah melewati proses approval"><i class="fas fa-info"></i></button>
+
+<!--body-->
+<div class="card text-start">
+    <div class="card-body">
+        <div class="table-responsive">
+            <?= $this->session->flashdata('msg'); ?>
+            <?php foreach ($user_req as $det) : ?>
+                <div class="table-responsive-md">
+                    <div class="justify-content-center col-md">
+                        <h3 class="text-center col-sm">Request Order</h3>
+                        <h4 class="header text-center col-md">No. <?= $det['kode_ro']; ?>/<?= date("m/y", strtotime($det['submit_date'])); ?></h4>
+                    </div>
+                    <hr />
+                    <table class="table table-light col-5">
+                        <tbody>
+                            <tr class="">
+                                <th>Nama User</th>
+                                <th>:</th>
+                                <td scope="row" colspan="2"><?= $det['email']; ?></td>
+                            </tr>
+                            <tr class="">
+                                <th>Tgl Pengajuan</th>
+                                <th>:</th>
+                                <td scope="row" colspan="2"><?= date("d-F-Y", strtotime($det['submit_date'])); ?></td>
+                            </tr>
+                            <tr class="">
+                                <th>Status</th>
+                                <th>:</th>
+                                <?php foreach ($request as $req) : ?>
+                                    <td scope="row" colspan="2"><?= $req['status_info']; ?></td>
+                                <?php endforeach; ?>
+                            </tr>
+                            <tr class="">
+                                <th>Alasan Request</th>
+                                <th>:</th>
+                                <td scope="row" colspan="2"><?= $det['alasan_req']; ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-            <?php } ?>
-        <?php endforeach; ?>
+                <hr />
+                <table class="table table-sm dataTable-container" id="myTable">
+                    <thead align=center>
+                        <tr>
+                            <th>No</th>
+                            <th>Jenis</th>
+                            <th>Deskripsi</th>
+                            <th>Jumlah Order</th>
+                            <th>Satuan</th>
+                            <th>foto rekomendasi</th>
+                            <th>Status</th>
+                            <?php if ($user['role_id'] == 3) : ?>
+                                <th>Aksi</th>
+                            <?php endif; ?>
+                        </tr>
+                    </thead>
+                    <tbody align=center>
+                        <?php $no = 0;
+                        foreach ($detail as $row) :
+                            $no++;
+                        ?>
+                            <tr>
+                                <td><?= $no ?></td>
+                                <td><?= $row['jenis_barang'] ?></td>
+                                <td><?= $row['desk_barang'] ?></td>
+                                <td><?= $row['qty_order'] ?></td>
+                                <td><?= $row['sat_order'] ?></td>
+                                <td><img src="<?= base_url(); ?>assets/img/foto-order/<?= $row['img_order']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 80px"></td>
+                                <td><?= $row['status_info'] ?></td>
+                                <td>
+                                    <!--tombol approval/reject-->
+                                    <?php if ($user['role_id'] == 3) : ?>
+                                        <?php if ($row['status_detail'] == 1) : ?>
+                                            <!--blm approve/reject-->
+                                            <a class="btn btn-success" href="<?= base_url('requestorder/approve_detail/'); ?><?= $row['id_detail']; ?>">approve
+                                            </a>
+                                            <a class="btn btn-danger" href="<?= base_url('requestorder/reject_detail/'); ?><?= $row['id_detail']; ?>">reject
+                                            </a>
+                                            <!--kalo reject-->
+                                        <?php elseif ($row['status_detail'] == 2) : ?>
+                                            <a class="btn btn-success" href="<?= base_url('requestorder/approve_detail/'); ?><?= $row['id_detail']; ?>">approve
+                                            </a>
+                                        <?php elseif ($row['status_detail'] == 3) : ?>
+                                            <a class="btn btn-danger" href="<?= base_url('requestorder/reject_detail/'); ?><?= $row['id_detail']; ?>">reject
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                    <div class="card">
+                        <tr class="">
+                    </div>
+                </table>
+                <hr />
+
+                <!-- disini ada fungsi untuk mengatur kalau memang dia belum disetujui belum ada tanda tangan atasannya-->
+                <div class="container text-center">
+                    <div class="row">
+                        <div class="col-sm m-2">
+                            Diajukan Oleh :
+                            <br />
+                            <img class="" src="<?= base_url(); ?>assets/img/qr-sign/<?= $det['qr_sign']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 120px"><br />
+                            <i><?= $det['nama']; ?></i>
+                        </div>
+                        <?php foreach ($request as $req) : ?>
+                            <?php if ($req['status_pengajuan'] > 2) : { ?>
+                                    <?php foreach ($user_approve as $us) : ?>
+                                        <div class="col-sm m-2">
+                                            Disetujui Oleh :
+                                            <br />
+                                            <img class="float right" src="<?= base_url(); ?>assets/img/qr-sign/<?= $us['nip']; ?>.png" style="max-width:100%; max-height: 100%; height: 100px; width: 120px"><br />
+                                            <i><?= $us['nama']; ?></i>
+                                        </div>
+                                    <?php endforeach ?>
+                                <?php }
+                            else : { ?>
+                                    <?php foreach ($user_approve as $us) : ?>
+                                        <div class="col-sm m-2">
+                                            Belum disetujui Oleh :
+                                            <br class="mx-4" />
+                                            <i><?= $us['nama']; ?></i>
+                                        </div>
+                                    <?php endforeach ?>
+                                <?php }
+                            endif; { ?>
+                            <?php } ?>
+                        <?php endforeach ?>
+                        <div class="col-sm m-2">
+                            Admin Pruchasing :
+                            <br />
+                            <img class="float right" src="<?= base_url(); ?>assets/img/qr-sign/<?= $det['qr_sign']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 120px"><br />
+                            <i>Admin Purchasing</i>
+                        </div>
+                        <!--sampe sini-->
+                    </div>
+                </div>
+                <div class="container mt-4">
+                    <div class="col-sm-4 mt-">Catatan Dari Approval : </div>
+                    <div class="col-sm-6"><?= $row['note_ro']; ?></div>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </div>
-</div>
-<!-- /.container-fluid -->
 </div>
 
 <!--Approve Modal -->

@@ -1,7 +1,7 @@
 <!-- Begin Page Content -->
 <?php foreach ($request as $req) : ?>
     <div class="container-fluid">
-        <div class="col-md-2 ml-md-auto mb-2"><a class="btn btn-secondary" style="align-content:flex-end;" href="<?= base_url('requestorder/get_id/' . $req['kode_ro']); ?>" role="button">
+        <div class="col-md-2 ml-md-auto mb-2"><a class="btn btn-secondary" style="align-content:flex-end;" href="<?= base_url('requestorder/detail/' . $req['kode_ro']); ?>" role="button">
                 Kembali</a>
         </div>
     <?php endforeach; ?>
@@ -16,6 +16,9 @@
             <div>
                 <div class="row">
                     <?php foreach ($request as $req) : ?>
+                        <div class="row">
+                            <div class="col-auto"><a class="btn btn-success" href="<?= base_url('requestorder/get_add_byedit/') . $req['kode_ro']; ?>" role="button"><i class="fa fa-plus"></i> Tambah Detail</a></div>
+                        </div>
                         <div class="col mb-2">
                             <input type="hidden" class="form-control" id="kode_order" name="kode_order" placeholder="<?= $req['kode_ro']; ?>" value="<?= $req['kode_ro']; ?>" readonly>
                         </div>
@@ -52,7 +55,7 @@
                                     <a class="btn btn-info far fa-thrash-alt" href="<?= base_url('requestorder/form_edit_detail/'); ?><?= $row['id_detail']; ?>"><i class="far fa-edit"></i></a>
                                 </td>
                                 <td>
-                                    <a class="btn btn-danger far fa-thrash-alt" href="<?= base_url('requestorder/delete_detail/'); ?><?= $row['id_detail']; ?>"><i class="fa fa-trash"></i></a>
+                                    <a class="btn btn-danger far fa-thrash-alt" href="<?= base_url('requestorder/delete_detailByID/'); ?><?= $row['id_detail']; ?>"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

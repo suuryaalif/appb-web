@@ -28,8 +28,8 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link active" aria-current="page" href="<?= base_url('Webpage/index'); ?>">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="<?= base_url('Webpage/service'); ?>">Service</a></li>
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="<?= base_url('Webpage/contact'); ?>">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="<?= site_url('Webpage/service'); ?>">Service</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="<?= site_url('Webpage/contact'); ?>">Contact</a></li>
                     <li><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             APPBweb
                         </button></li>

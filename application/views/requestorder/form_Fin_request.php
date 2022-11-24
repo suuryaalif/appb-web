@@ -38,27 +38,27 @@
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <form method="POST" action="<?= base_url('') ?>requestorder/insert_fin_request/<?= $kodeotomatis; ?>">
-                    <hr>
-                    <h5 class="mt-4 text-center">silahkan isi form dibawah ini</h5>
-                    <div class="control-group">
-                        <!-- dibawah ini inputan yang muncul kode request order selanjutnya secara otomatis -->
-                        <input type="text" class="form-control" id="kode_order" name="kode_order" placeholder="No Permintaan : <?= $kodeotomatis; ?>" value="<?= $kodeotomatis; ?>" readonly>
-                        <label class="mt-2">Alasan Permintaan</label>
-                        <input type="text" name="alasan_req" id="alasan_req" class="form-control mb-1" placeholder="Masukan Keterangan Request Anda" required>
-                        <label class="mt-2">Tanggal Request</label>
-                        <input type="date" name="submit_date" id="submit_date" class="form-control mb-1">
-                        <br>
-                        <div class="text-center mt-3">
-                            <a class="btn btn-secondary" href="<?= base_url('requestorder/get_pre_request'); ?>" role="button">Kembali</a>
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i>
-                                Submit Request Order
-                            </button>
-                            <hr>
-                        </div>
+                <?= form_open_multipart('requestorder/save_requestorder/' . $kodeotomatis); ?>
+                <hr>
+                <h5 class="mt-4 text-center">silahkan isi form dibawah ini</h5>
+                <div class="control-group">
+                    <!-- dibawah ini inputan yang muncul kode request order selanjutnya secara otomatis -->
+                    <input type="text" class="form-control" id="kode_order" name="kode_order" placeholder="No Permintaan : <?= $kodeotomatis; ?>" value="<?= $kodeotomatis; ?>" readonly>
+                    <label class="mt-2">Alasan Permintaan</label>
+                    <input type="text" name="alasan_req" id="alasan_req" class="form-control mb-1" placeholder="Masukan Keterangan Request Anda" required>
+                    <label class="mt-2">Tanggal Request</label>
+                    <input type="date" name="submit_date" id="submit_date" class="form-control mb-1">
+                    <br>
+                    <div class="text-center mt-3">
+                        <a class="btn btn-secondary" href="<?= base_url('requestorder/get_pre_request'); ?>" role="button">Kembali</a>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i>
+                            Submit Request Order
+                        </button>
+                        <hr>
                     </div>
-                </form>
-
+                </div>
+                <!-- </form> -->
+                <?= form_close(); ?>
                 <hr>
             </div>
         </div>

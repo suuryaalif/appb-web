@@ -38,22 +38,22 @@
                                     <!-- formulir login -->
                                     <div><?= $this->session->flashdata('warning'); ?></div>
                                     <div><?= $this->session->flashdata('msg'); ?></div>
-                                    <form class="user" method="post" action="<?= base_url('auth'); ?>">
-                                        <div class="form-group">
-                                            <!-- input email -->
-                                            <input type="text" class="form-control form-control-user" id="email" name="email" placeholder="Enter Email Address..." value="<?= set_value('email'); ?>">
-                                            <?= form_error('email', '<small class="text-danger p-lg-3">', '</small>'); ?>
-                                        </div>
-                                        <!-- formulir password -->
-                                        <div class="form-group">
-                                            <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Password">
-                                            <?= form_error('password', '<small class="text-danger p-lg-3">', '</small>'); ?>
-                                        </div>
+                                    <?= form_open_multipart('auth'); ?>
+                                    <div class="form-group">
+                                        <!-- input email -->
+                                        <input type="text" class="form-control form-control-user" id="email" name="email" placeholder="Enter Email Address..." value="<?= set_value('email'); ?>">
+                                        <?= form_error('email', '<small class="text-danger p-lg-3">', '</small>'); ?>
+                                    </div>
+                                    <!-- formulir password -->
+                                    <div class="form-group">
+                                        <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Password">
+                                        <?= form_error('password', '<small class="text-danger p-lg-3">', '</small>'); ?>
+                                    </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-user btn-block">
                                     Login
                                 </button>
-                                </form>
+                                <?= form_close(); ?>
                                 <hr>
                                 <div class="text-center">
                                     <button type="button" id="tombol" class="btn btn-light">Need an account? Request to admin purhasing!</button>

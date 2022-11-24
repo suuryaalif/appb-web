@@ -136,57 +136,6 @@ class Requestorder extends CI_Controller
     }
 
 
-    //fungsi ini buat nambahin detail barang di temp table
-    public function add_new_detail()
-    {
-        $this->form_validation->set_rules('desk_barang', 'Desk_barang', 'required|min_length[5]', [
-            'required' => 'wajib diisi',
-            'min_length[5]' => 'dekripsi terlalu pendek'
-        ]);
-        $this->form_validation->set_rules('qty_order', 'Qty_order', 'required|numeric', [
-            'numeric' => 'wajib diisi dengan angka'
-        ]);
-
-        //konfigurasi sebelum gambar diupload
-        $config['upload_path'] = './assets/img/foto-order/';
-        $config['allowed_types'] = 'jpg|png|jpeg';
-        $config['max_size'] = '3000';
-        $config['max_width'] = '1260';
-        $config['max_height'] = '1260';
-        $config['file_name'] = 'img-order' . date('dmYHis') . '.jpg';
-        $this->load->library('upload', $config);
-
-        if ($this->form_validation->run() == false) {
-            redirect('requestorder/get_pre_request');
-        } else {
-            if (!$this->upload->do_upload('foto_order')) {
-                $error = array('error' => $this->upload->display_errors());
-                redirect('requestorder/get_pre_request', $error);
-            } else {
-                $image = $this->upload->data();
-                $gambar = $image['file_name'];
-                // $this->upload->do_upload('foto_order');
-
-                $data = [
-                    'kode_order' => $this->input->post('kode_order', true),
-                    'jenis_barang' => $this->input->post('jenis_barang', true),
-                    'desk_barang' => $this->input->post('desk_barang', true),
-                    'qty_order' => $this->input->post('qty_order', true),
-                    'sat_order' => $this->input->post('sat_order', true),
-                    'img_order' => $gambar,
-                    'status_detail' => '1'
-                ];
-                $this->requestModel->insert_detail($data, 'temp_order');
-                $this->session->set_flashdata('msg', '
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                data barang telah ditambahkan di table bawah, silahkan tambahkan lagi jika ingin.
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button></div>');
-                redirect('requestorder/get_pre_request');
-            }
-        }
-    }
     //fungsi ini menampilkan hasil terkahir dari booking request
     public function result_request()
     {
@@ -204,6 +153,7 @@ class Requestorder extends CI_Controller
         $this->load->view('requestorder/fin_info_request', $data);
         $this->load->view('homepage/layouts/footer', $data);
     }
+
     //ini buat balik ke dashboard request
     public function finish_request()
     {
@@ -329,58 +279,130 @@ class Requestorder extends CI_Controller
         $this->load->view('requestorder/edit_request', $data);
         $this->load->view('homepage/layouts/footer', $data);
     }
+
+    public function get_add_byedit()
+    {
+        $kode_ro = $this->uri->segment(3);
+        $data = [
+            'title' => 'request order',
+            'user' => $this->userModel->get_user_session(),
+            'request' => $this->requestModel->get_requestbyKode($kode_ro)
+        ];
+
+        $this->load->view('homepage/layouts/header', $data);
+        $this->load->view('homepage/layouts/sidebar', $data);
+        $this->load->view('homepage/layouts/topbar', $data);
+        $this->load->view('requestorder/add_by_edit', $data);
+        $this->load->view('homepage/layouts/footer', $data);
+    }
     //===========================selesai fungsi tampil======================//
 
     //=========================Fungsi Manipulasi Tambah/Edit/Hapus======================//
-    //fungsi dibawah ini buat menghapus salah satu dari detail barang
-    public function delete_detail()
+
+    //==========================================Fungsi Add==============================//
+    //fungsi ini buat nambahin detail barang di temp table
+    public function add_temp_detail()
     {
-        $id = $this->uri->segment(3);
-        //ini khusus buat ngapus foto pada direktori
-        $data = $this->requestModel->get_temp_detail($id)->row();
-        $path = './assets/img/foto-order/' . $data->img_order;
-        unlink($path);
+        $this->form_validation->set_rules('desk_barang', 'Desk_barang', 'required|min_length[5]', [
+            'required' => 'wajib diisi',
+            'min_length[5]' => 'dekripsi terlalu pendek'
+        ]);
+        $this->form_validation->set_rules('qty_order', 'Qty_order', 'required|numeric', [
+            'numeric' => 'wajib diisi dengan angka'
+        ]);
 
-        $this->requestModel->delete_detail($id);
-        $this->session->set_flashdata('msg', '
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        data barang telah berhasil dihapus.
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button></div>');
-        redirect('requestorder/get_pre_request');
+        //konfigurasi sebelum gambar diupload
+        $config['upload_path'] = './assets/img/foto-order/';
+        $config['allowed_types'] = 'jpg|png|jpeg';
+        $config['max_size'] = '3000';
+        $config['max_width'] = '1260';
+        $config['max_height'] = '1260';
+        $config['file_name'] = 'img-order' . date('dmYHis') . '.jpg';
+        $this->load->library('upload', $config);
+
+        if ($this->form_validation->run() == false) {
+            redirect('requestorder/get_pre_request');
+        } else {
+            if (!$this->upload->do_upload('foto_order')) {
+                $error = array('error' => $this->upload->display_errors());
+                redirect('requestorder/get_pre_request', $error);
+            } else {
+                $image = $this->upload->data();
+                $gambar = $image['file_name'];
+                // $this->upload->do_upload('foto_order');
+
+                $data = [
+                    'kode_order' => $this->input->post('kode_order', true),
+                    'jenis_barang' => $this->input->post('jenis_barang', true),
+                    'desk_barang' => $this->input->post('desk_barang', true),
+                    'qty_order' => $this->input->post('qty_order', true),
+                    'sat_order' => $this->input->post('sat_order', true),
+                    'img_order' => $gambar,
+                    'status_detail' => '1'
+                ];
+                $this->requestModel->insert_detail($data, 'temp_order');
+                $this->session->set_flashdata('msg', '
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                data barang telah ditambahkan di table bawah, silahkan tambahkan lagi jika ingin.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button></div>');
+                redirect('requestorder/get_pre_request');
+            }
+        }
     }
-
-    //funsi ini buat masukin inputan request_order
-    public function insert_fin_request()
+    //fungsi nambahin detail order dari pilihan edit
+    public function add_new_detail()
     {
         $kode_ro = $this->uri->segment(3);
-        $nip = $this->session->userdata('nip');
-        $id_div = $this->session->userdata('id_divisi');
+        $this->form_validation->set_rules('desk_barang', 'Desk_barang', 'required|min_length[5]', [
+            'required' => 'wajib diisi',
+            'min_length[5]' => 'dekripsi terlalu pendek'
+        ]);
+        $this->form_validation->set_rules('qty_order', 'Qty_order', 'required|numeric', [
+            'numeric' => 'wajib diisi dengan angka'
+        ]);
 
-        $data = [
-            'kode_ro' => $this->input->post('kode_order', true),
-            'alasan_req' => $this->input->post('alasan_req', true),
-            'submit_date' => $this->input->post('submit_date', true),
-            'status_pengajuan' => 1,
-            'divisi' => $id_div,
-            'id_user' => $nip,
-        ];
+        //konfigurasi sebelum gambar diupload
+        $config['upload_path'] = './assets/img/foto-order/';
+        $config['allowed_types'] = 'jpg|png|jpeg';
+        $config['max_size'] = '3000';
+        $config['max_width'] = '1260';
+        $config['max_height'] = '1260';
+        $config['file_name'] = 'img-order' . date('dmYHis') . '.jpg';
+        $this->load->library('upload', $config);
 
-        $this->requestModel->insert_request($data, 'request_order');
-        $this->requestModel->post_detail($kode_ro);
-        // $this->requestModel->delete_temp();
-        $this->requestModel->joinDetail($kode_ro);
-        $this->session->set_flashdata('msg', '
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>Satu langkah lagi!</strong> Pastikan anda mendownload/Mencetak Request Order Sebelum Kembali.
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button></div>');
-
-        redirect('requestorder/result_request');
+        if ($this->form_validation->run() == false) {
+            redirect('requestorder/get_pre_request');
+        } else {
+            if (!$this->upload->do_upload('foto_order')) {
+                $error = array('error' => $this->upload->display_errors());
+                redirect('requestorder/get_pre_request', $error);
+            } else {
+                $image = $this->upload->data();
+                $gambar = $image['file_name'];
+                // $this->upload->do_upload('foto_order');
+                $data = [
+                    'kode_order' => $this->input->post('kode_order', true),
+                    'jenis_barang' => $this->input->post('jenis_barang', true),
+                    'desk_barang' => $this->input->post('desk_barang', true),
+                    'qty_order' => $this->input->post('qty_order', true),
+                    'sat_order' => $this->input->post('sat_order', true),
+                    'img_order' => $gambar,
+                    'status_detail' => '1'
+                ];
+                $this->requestModel->insert_detail($data, 'detail_request');
+                $this->session->set_flashdata('msg', '
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                data barang telah ditambahkan di table bawah, silahkan tambahkan lagi jika ingin.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button></div>');
+                redirect('requestorder/get_data_edit/' . $kode_ro);
+            }
+        }
     }
-
+    //==================================APPROVAL=======================================//
     //fungsi approve detail
     public function approve_detail()
     {
@@ -397,7 +419,7 @@ class Requestorder extends CI_Controller
         </button></div>');
 
         //ini di redirect ke halaman detail order lagi
-        redirect('requestorder/get_id/' . $kd);
+        redirect('requestorder/detail/' . $kd);
     }
 
     //fungsi reject detail
@@ -415,7 +437,7 @@ class Requestorder extends CI_Controller
         <span aria-hidden="true">&times;</span>
         </button></div>');
 
-        redirect('requestorder/get_id/' . $kd);
+        redirect('requestorder/detail/' . $kd);
     }
 
     //untuk approve request order
@@ -447,6 +469,37 @@ class Requestorder extends CI_Controller
         <span aria-hidden="true">&times;</span>
         </button></div>');
         redirect('requestorder');
+    }
+    //============================================================QQ==============//
+    //===========================SAVE/INSERT======================================//
+    //funsi ini buat masukin inputan request_order
+    public function save_requestorder()
+    {
+        $kode_ro = $this->uri->segment(3);
+        $nip = $this->session->userdata('nip');
+        $id_div = $this->session->userdata('id_divisi');
+
+        $data = [
+            'kode_ro' => $this->input->post('kode_order', true),
+            'alasan_req' => $this->input->post('alasan_req', true),
+            'submit_date' => $this->input->post('submit_date', true),
+            'status_pengajuan' => 1,
+            'divisi' => $id_div,
+            'id_user' => $nip,
+        ];
+
+        $this->requestModel->insert_request($data, 'request_order');
+        $this->requestModel->post_detail($kode_ro);
+        $this->requestModel->delete_temp();
+        $this->requestModel->joinDetail($kode_ro);
+        $this->session->set_flashdata('msg', '
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Berhasil Diajukan!</strong> Pastikan anda mendownload/Mencetak Request Order Sebelum Kembali.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button></div>');
+
+        redirect('requestorder/detail/' . $kode_ro);
     }
 
     //fungsi simpan editan data detail request
@@ -493,7 +546,7 @@ class Requestorder extends CI_Controller
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
         </button></div>');
-        redirect('requestorder/form_edit_ro/' . $kd_ro);
+        redirect('requestorder/edit_request/' . $kd_ro);
     }
 
     //ini fungsi untuk save edit request
@@ -521,7 +574,8 @@ class Requestorder extends CI_Controller
 
         redirect('requestorder');
     }
-
+    //=================================================QQ====================================//
+    //=========================================DELETE/TRUNCATE=====================================//
     //fungsi delete request order data seluruhnya
     public function delete_req_data()
     {
@@ -544,12 +598,69 @@ class Requestorder extends CI_Controller
 
         redirect('requestorder');
     }
+
+    //fungsi dibawah ini buat menghapus salah satu dari detail barang
+    public function delete_temp_detail()
+    {
+        $id = $this->uri->segment(3);
+        //ini khusus buat ngapus foto pada direktori
+        $data = $this->requestModel->get_temp_detail($id)->row();
+        $path = './assets/img/foto-order/' . $data->img_order;
+        unlink($path);
+
+        $this->requestModel->delete_temp_detail($id);
+        $this->session->set_flashdata('msg', '
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            data barang telah berhasil dihapus.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button></div>');
+        redirect('requestorder/get_pre_request');
+    }
+
+    public function delete_detailByID()
+    {
+        $id = $this->uri->segment(3);
+        //ini khusus buat ngapus foto pada direktori
+        $detail = $this->requestModel->get_detailbyID($id)->row();
+        $kode_ro = $detail->kode_order;
+        $row = $this->db->select('*')->from('detail_request')->where('kode_order', $kode_ro)->get()->num_rows();
+
+        $path = './assets/img/foto-order/' . $detail->img_order;
+        unlink($path);
+
+        if ($row > 1) {
+            $this->requestModel->delete_detailByID($id);
+
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            data barang telah berhasil dihapus.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button></div>');
+
+            redirect('requestorder/get_data_edit/' . $kode_ro);
+        } else {
+            $this->requestModel->delete_detailByID($id);
+            $this->requestModel->delete_request($kode_ro);
+
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            data request berhasil dihapus.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button></div>');
+
+            redirect('requestorder');
+        }
+    }
     //===============================fungsi manipulasi selesai========================
 
-    //======================fungsi cetak==============================================
+    //====================================fungsi cetak================================
     public function save_pdf()
     {
         $where = $this->session->userdata('nip');
+        $kode_ro = $this->uri->segment(3);
         $data['nama'] = $this->session->userdata('nama');
         $data['title'] = 'Print Request Order';
         $data['user'] = $this->userModel->get_user_session();

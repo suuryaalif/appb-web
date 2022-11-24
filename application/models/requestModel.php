@@ -24,21 +24,20 @@ class requestModel extends CI_Model
         $this->db->where('id_user', $where);
         return $this->db->get()->result_array();
     }
-    public function get_detailbyID($where)
+    public function get_detailbyID($id = null)
     {
-        // return $this->db->get_where('request_order', array('id_user' => $where))->result_array();
-        $this->db->select('*');
-        $this->db->from('detail_request');
-        $this->db->join('status', 'status.id_status = detail_request.status_detail');
-        $this->db->where('id_detail', $where);
-        return $this->db->get()->result_array();
+        if ($id != null) {
+            return $this->db->get_where('detail_request', array('id_detail' => $id));
+        }
+        return $this->db->get('detail_request')->result_array();
     }
     public function get_detailbyKode($where)
     {
         // return $this->db->get_where('request_order', array('id_user' => $where))->result_array();
         $this->db->select('*');
-        $this->db->from('detail_request');
-        $this->db->join('status', 'status.id_status = detail_request.status_detail');
+        $this->db->from('detail_request d');
+        $this->db->join('status s', 's.id_status = d.status_detail');
+        $this->db->join('request_order r', 'r.kode_ro = d.kode_order');
         $this->db->where('kode_order', $where);
         return $this->db->get()->result_array();
     }
@@ -266,6 +265,11 @@ class requestModel extends CI_Model
     public function delete_detail($kode_ro)
     {
         $this->db->where('kode_order', $kode_ro);
+        $this->db->delete('detail_request');
+    }
+    public function delete_detailByID($id)
+    {
+        $this->db->where('id_detail', $id);
         $this->db->delete('detail_request');
     }
     //fungsi delete request data pada request_order
