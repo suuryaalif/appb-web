@@ -1,19 +1,24 @@
 <?php
-if (!defined('BASEPATH')) exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 use Dompdf\Dompdf;
+use Dompdf\Options;
 
-class Dompdf_gen
+class Pdfgenerator
 {
-
-	public function __construct()
+	public function generate($html, $filename = '', $paper = '', $orientation = '', $stream = TRUE)
 	{
-
-		require_once APPPATH . 'third_party/dompdf/autoload.inc.php';
-
-		$pdf = new Dompdf();
-
-		$CI = &get_instance();
-		$CI->dompdf = $pdf;
+		$options = new Options();
+		$options->set('isRemoteEnabled', TRUE);
+		$options->setChroot(FCPATH);
+		$dompdf = new Dompdf($options);
+		$dompdf->loadHtml($html);
+		$dompdf->setPaper($paper, $orientation);
+		$dompdf->render();
+		if ($stream) {
+			$dompdf->stream($filename . ".pdf", array("Attachment" => 0));
+		} else {
+			return $dompdf->output();
+		}
 	}
 }

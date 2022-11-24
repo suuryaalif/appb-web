@@ -661,28 +661,29 @@ class Requestorder extends CI_Controller
     {
         $where = $this->session->userdata('nip');
         $kode_ro = $this->uri->segment(3);
+        $divisi = $this->session->userdata('id_divisi');
+        $usr_apr = $this->requestModel->get_user_approval($divisi);
+
         $data['nama'] = $this->session->userdata('nama');
         $data['title'] = 'Print Request Order';
         $data['user'] = $this->userModel->get_user_session();
-        $data['request'] = $this->requestModel->result_last_request($where);
-        $data['items'] = $this->requestModel->get_temp_detail();
-
+        $data['request'] = $this->requestModel->get_requestbyKode($kode_ro);
+        $data['detail'] = $this->requestModel->get_detailbyKode($kode_ro);
+        $data['user_approve'] = $usr_apr;
 
         $sroot      = $_SERVER['DOCUMENT_ROOT'];
         include $sroot . "/appb-web/application/third_party/dompdf/autoload.inc.php";
         $dompdf = new Dompdf\Dompdf();
         $this->load->view('requestorder/pdf_requestorder', $data);
-
         $paper_size = 'A4'; // ukuran kertas
-        $orientation = 'landscape'; //tipe format kertas potrait atau landscape
+        $orientation = 'potrait'; //tipe format kertas potrait atau landscape
         $html = $this->output->get_output();
-
-        $dompdf->set_paper($paper_size, $orientation);
+        $dompdf->setPaper($paper_size, $orientation);
         //Convert to PDF
-        $dompdf->load_html($html);
+        $dompdf->loadHtml($html);
         $dompdf->render();
         ob_end_clean();
-        $dompdf->stream("laporan.pdf", array('Attachment' => 0));
+        $dompdf->stream("requestorder.pdf", array('Attachment' => 0));
         // nama file pdf yang di hasilkan
     }
 }

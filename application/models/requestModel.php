@@ -56,6 +56,8 @@ class requestModel extends CI_Model
         $this->db->select('*');
         $this->db->from('request_order');
         $this->db->join('status', 'status.id_status = request_order.status_pengajuan');
+        $this->db->join('user', 'user.nip = request_order.id_user');
+        $this->db->join('divisi', 'divisi.div_id=request_order.divisi');
         $this->db->where('kode_ro', $where);
         return $this->db->get()->result_array();
     }
