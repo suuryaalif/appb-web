@@ -26,6 +26,10 @@ class Home extends CI_Controller
         $this->load->view('homepage/dashboard', $data);
         $this->load->view('homepage/layouts/footer', $data);
     }
+
+
+
+
     public function profile()
     {
         $data = [

@@ -1,6 +1,6 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
-    <div class="col-md-2 ml-md-auto mb-2"><a class="btn btn-secondary" style="align-content:flex-end;" href="<?= base_url('requestorder'); ?>" role="button">
+    <div class="col-md-auto"><a class="btn btn-secondary" style="align-content:flex-end;" href="<?= base_url('requestorder'); ?>" role="button">
             Kembali</a>
     </div>
     <div class="card card-header">

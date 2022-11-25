@@ -249,6 +249,27 @@ class requestModel extends CI_Model
         $this->db->update('request_order', $data);
     }
 
+    public function update_status($id)
+    {
+        $this->db->set('status_pengajuan', 'status_pengajuan+1', false);
+        $this->db->where('kode_ro', $id);
+        $this->db->update('request_order');
+    }
+
+    public function back_status($id)
+    {
+        $this->db->set('status_pengajuan', 'status_pengajuan-1', false);
+        $this->db->where('kode_ro', $id);
+        $this->db->update('request_order');
+    }
+
+    public function reject_status($id)
+    {
+        $this->db->set('status_pengajuan', 2);
+        $this->db->where('kode_ro', $id);
+        $this->db->update('request_order');
+    }
+
     //fungsi update data
     public function update_detail($data, $id)
     {

@@ -53,7 +53,18 @@
                         <!--kalo ini buat role requestion,gak bisa edit statusnya sudah disubmit-->
                     <?php endif; ?>
                     <!-- tombol approval dan reject hanya bisa diakses oleh user approval -->
-                <?php elseif ($req['status_pengajuan'] >= 2) : ?>
+                <?php elseif ($req['status_pengajuan'] == 2) : ?>
+                    <?php if ($this->session->userdata('role_id') == 1 or $this->session->userdata('role_id') == 2) : ?>
+                        <div class="col-sm-auto">
+                            <a class="btn btn-warning" href="<?= base_url('requestorder/get_data_edit/') . $req['kode_ro']; ?>" role="button"><i class="fa fa-edit"></i>
+                                Perbaiki</a>
+                        </div>
+                        <div class="col-sm-auto">
+                            <a class="btn btn-danger" href="<?= base_url('requestorder/delete_req_data/' . $req['kode_ro']); ?>" role="button"><i class="fa fa-trash"></i>
+                                Hapus</a>
+                        </div>
+                    <?php endif; ?>
+                <?php elseif ($req['status_pengajuan'] > 2) : ?>
                     <div class="col-md-auto">
                         <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="order telah melewati proses approval"><i class="fas fa-info"></i></button>
                     </div>
@@ -169,7 +180,8 @@
                             Diajukan Oleh :
                             <br />
                             <img class="" src="<?= base_url(); ?>assets/img/qr-sign/<?= $det['qr_sign']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 120px"><br />
-                            <i><?= $det['nama']; ?></i>
+                            <u><i><?= $det['nama']; ?></i></u><br>
+                            <a>Supervisor Divisi</a>
                         </div>
                         <?php foreach ($request as $req) : ?>
                             <?php if ($req['status_pengajuan'] > 2) : { ?>
@@ -178,7 +190,14 @@
                                             Disetujui Oleh :
                                             <br />
                                             <img class="float right" src="<?= base_url(); ?>assets/img/qr-sign/<?= $us['nip']; ?>.png" style="max-width:100%; max-height: 100%; height: 100px; width: 120px"><br />
-                                            <i><?= $us['nama']; ?></i>
+                                            <u><i><?= $us['nama']; ?></i></u><br>
+                                            <a>Manager Divisi</a>
+                                        </div>
+                                        <div class="col-sm m-2">
+                                            Admin Purchasing :
+                                            <br />
+                                            <img class="float right" src="<?= base_url(); ?>assets/img/qr-sign/<?= $det['qr_sign']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 120px"><br />
+                                            <i>Admin Purchasing</i>
                                         </div>
                                     <?php endforeach ?>
                                 <?php }
@@ -186,26 +205,30 @@
                                     <?php foreach ($user_approve as $us) : ?>
                                         <div class="col-sm m-2">
                                             Belum disetujui Oleh :
-                                            <br class="mx-4" />
-                                            <i><?= $us['nama']; ?></i>
+                                            <br><br><br><br><br>
+                                            <u><i><?= $us['nama']; ?></i></u><br>
+                                            <a>Manager Divisi</a>
+                                        </div>
+                                        <div class="col-sm m-2">
+                                            Dikembalikan Oleh :
+                                            <br><br><br><br><br>
+                                            <i>Admin Purchasing</i>
                                         </div>
                                     <?php endforeach ?>
                                 <?php }
                             endif; { ?>
                             <?php } ?>
                         <?php endforeach ?>
-                        <div class="col-sm m-2">
-                            Admin Pruchasing :
-                            <br />
-                            <img class="float right" src="<?= base_url(); ?>assets/img/qr-sign/<?= $det['qr_sign']; ?>" style="max-width:100%; max-height: 100%; height: 100px; width: 120px"><br />
-                            <i>Admin Purchasing</i>
-                        </div>
                         <!--sampe sini-->
                     </div>
                 </div>
                 <div class="container mt-4">
                     <div class="col-sm-4 mt-">Catatan Dari Approval : </div>
-                    <div class="col-sm-6"><?= $row['note_ro']; ?></div>
+                    <?php if (empty($req['note_ro'])) : ?>
+                        <div class="col-sm-4 mt-">tidak ada komentar</div>
+                    <?php else : ?>
+                        <div class="col-sm-6"><?= $req['note_ro']; ?></div>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         </div>

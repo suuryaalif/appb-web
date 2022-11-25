@@ -1,4 +1,8 @@
 <?php
+
+use Dompdf\Options;
+use Dompdf\Dompdf;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Requestorder extends CI_Controller
@@ -470,6 +474,48 @@ class Requestorder extends CI_Controller
         </button></div>');
         redirect('requestorder');
     }
+
+    public function update_status()
+    {
+        $id = $this->uri->segment(3);
+
+        $this->requestModel->update_status($id);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Di update ke proses berikutnya.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+        redirect('requestorder');
+    }
+
+    public function back_status()
+    {
+        $id = $this->uri->segment(3);
+
+        $this->requestModel->back_status($id);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Berhasil Mundur ke proses sebelumnya.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+        redirect('requestorder');
+    }
+
+    public function reject_status()
+    {
+        $id = $this->uri->segment(3);
+
+        $this->requestModel->reject_status($id);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Berhasil Mundur ke proses sebelumnya.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+        redirect('requestorder');
+    }
     //============================================================QQ==============//
     //===========================SAVE/INSERT======================================//
     //funsi ini buat masukin inputan request_order
@@ -673,7 +719,10 @@ class Requestorder extends CI_Controller
 
         $sroot      = $_SERVER['DOCUMENT_ROOT'];
         include $sroot . "/appb-web/application/third_party/dompdf/autoload.inc.php";
-        $dompdf = new Dompdf\Dompdf();
+
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $dompdf = new Dompdf($options);
         $this->load->view('requestorder/pdf_requestorder', $data);
         $paper_size = 'A4'; // ukuran kertas
         $orientation = 'potrait'; //tipe format kertas potrait atau landscape
