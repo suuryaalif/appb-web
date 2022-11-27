@@ -30,8 +30,12 @@ class Webpage extends CI_Controller
 
 	public function tracking_page()
 	{
+		$data = [
+			'title' => 'tracking order'
+		];
+
 		$this->load->view('webpage/layouts/header');
-		$this->load->view('webpage/tracking');
+		$this->load->view('webpage/tracking', $data);
 		$this->load->view('webpage/layouts/footer');
 	}
 
@@ -45,41 +49,22 @@ class Webpage extends CI_Controller
 		$this->load->view('loginpage/registerform');
 	}
 
-	public function track($id = null)
+	public function track()
 	{
-		if ($id == true) {
-			$this->session->set_flashdata('msg', '
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Maaf Akses Terbatas!</strong> anda tidak diperkenankan menambah request.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button></div>');
-
-			redirect('webpage/track');
-		}
-
 		$this->load->model('requestModel');
-
 		$id = $this->input->post('trackid', true);
 		$result = $this->requestModel->get_requestbyKode($id);
-
 		$data = [
 			'id' => $id,
 			'result_kode' => $result
 		];
 
-		// var_dump($data);
-		// die;
-
 		if ($result == null) {
 			$this->session->set_flashdata('msg', '
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Maaf Akses Terbatas!</strong> anda tidak diperkenankan menambah request.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button></div>');
+            <strong>Maaf!</strong> kode pencarian tidak ditemukan</div>');
 
-			redirect('webpage/track');
+			redirect('webpage/tracking_page');
 		} else {
 			$this->load->view('webpage/layouts/header');
 			$this->load->view('webpage/tracked', $data);

@@ -15,16 +15,16 @@
     <link rel="stylesheet" href="<?= base_url('assets'); ?>/sweetalert/dist/sweetalert2.min.css">
 </head>
 
-<body class="bg-info">
+<body class="" style="background-color:darkturquoise ;">
 
     <div class="container">
 
         <!-- Outer Row -->
-        <div class="row justify-content-center">
+        <div class="row justify-content-center bg-transparent shadow-lg">
             <div class="col-lg-7">
 
-                <div class="card bg-light o-hidden border-0 shadow-lg my-5">
-                    <div class="card-body p-3">
+                <div class="card bg-light o-hidden border-0 shadow-lg  my-5">
+                    <div class="card-body p-5">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                             <div class="col-lg">
@@ -58,13 +58,16 @@
                                 <div class="text-center">
                                     <button type="button" id="tombol" class="btn btn-light">Need an account? Request to admin purhasing!</button>
                                 </div>
+                                <div class="p-1 mb-1">
+                                    <a class="btn btn-blok btn-light float-right p-2" href="<?= base_url('webpage/get_registration'); ?>" hidden>Registration Form</a>
+                                    <a href="<?= base_url('webpage'); ?>" class="btn btn-light btn-block">
+                                        Kembali ke halaman website
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <a class="btn btn-blok btn-light float-right" href="<?= base_url('webpage/get_registration'); ?>">Registration Form</a>
-                    <a href="<?= base_url('webpage'); ?>" class="btn btn-light btn-block">
-                        Kembali ke halaman website
-                    </a>
+
                 </div>
             </div>
         </div>

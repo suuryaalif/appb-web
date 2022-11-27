@@ -1,5 +1,5 @@
 <section class="py-5 bg-light" id="scroll-target">
-    <div class="container px-10 my-5">
+    <div class="container px-10 my-5" style="width:fit-content;">
 
 
         <div class="text-center">
@@ -21,31 +21,34 @@
                     <?= form_close(); ?>
                 </div>
                 <div>
-                    <table class="table table-sm table-striped dataTable" id="dataTable">
-                        <thead align=center>
-                            <tr>
-                                <th>No</th>
-                                <th>Kode RO</th>
-                                <th>Desk. Permintaan</th>
-                                <th>Tgl Pengajuan</th>
-                                <th>Status Pengajuan</th>
-                            </tr>
-                        </thead>
-                        <tbody align=center>
-                            <?php $no = 0;
-                            foreach ($result_kode as $row) :
-                                $no++;
-                            ?>
+                    <br />
+                    <div class="card bg-light shadow h-25">
+                        <table class="table table-sm table-striped table-responsive dataTable" id="dataTable" style="border-style:solid ;">
+                            <thead align=center>
                                 <tr>
-                                    <td><?= $no ?></td>
-                                    <td><?= $row['kode_ro'] ?></td>
-                                    <td class="col-3"><?= $row['alasan_req'] ?></td>
-                                    <td><?= $row['submit_date'] ?></td>
-                                    <td><?= $row['status_info'] ?></td>
+                                    <th>No</th>
+                                    <th>Kode RO</th>
+                                    <th>Desk. Permintaan</th>
+                                    <th>Tgl Pengajuan</th>
+                                    <th>Status Pengajuan</th>
                                 </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody align=center>
+                                <?php $no = 0;
+                                foreach ($result_kode as $row) :
+                                    $no++;
+                                ?>
+                                    <tr>
+                                        <td><?= $no ?></td>
+                                        <td><?= $row['kode_ro'] ?></td>
+                                        <td class="col-3"><?= $row['alasan_req'] ?></td>
+                                        <td><?= $row['submit_date'] ?></td>
+                                        <td><?= $row['alias_status'] ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <!--end of col-->
             </div>

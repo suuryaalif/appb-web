@@ -90,8 +90,8 @@ class Requestorder extends CI_Controller
 
     public function get_pre_request()
     {
+        $userinfo_temp = $this->session->userdata('nip');
         if ($this->session->userdata('role_id') == 3) {
-
             $this->session->set_flashdata('msg', '
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Maaf Akses Terbatas!</strong> anda tidak diperkenankan menambah request.
@@ -104,7 +104,7 @@ class Requestorder extends CI_Controller
             'title' => 'Form Request',
             'user' => $this->userModel->get_user_session(),
             'kodeotomatis' => $this->requestModel->AutoCode(),
-            'detail' => $this->requestModel->get_temp_detail()
+            'detail' => $this->requestModel->get_temp_detail($userinfo_temp)->result_array()
         ];
 
         $this->load->view('homepage/layouts/header', $data);
@@ -342,7 +342,8 @@ class Requestorder extends CI_Controller
                     'qty_order' => $this->input->post('qty_order', true),
                     'sat_order' => $this->input->post('sat_order', true),
                     'img_order' => $gambar,
-                    'status_detail' => '1'
+                    'status_detail' => '1',
+                    'id_user' => $this->session->userdata('nip')
                 ];
                 $this->requestModel->insert_detail($data, 'temp_order');
                 $this->session->set_flashdata('msg', '

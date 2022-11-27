@@ -159,13 +159,13 @@ class requestModel extends CI_Model
         return $this->db->get('detail_request')->result_array();
     }
 
-    //fungsi untuk menampilakn seluruh temp_order / berdasarkan id
+    //fungsi untuk menampilakn seluruh temp_order / berdasarkan idd_detaialnya dan berdasarkan usernya
     public function get_temp_detail($id = null)
     {
-        if ($id != null) {
+        if ($id <= 8) {
             return $this->db->get_where('temp_order', array('id' => $id));
         }
-        return $this->db->get('temp_order')->result_array();
+        return $this->db->get_where('temp_order', array('id_user' => $id));
     }
 
     //menambahkan kolom detail_request
@@ -300,5 +300,22 @@ class requestModel extends CI_Model
     {
         $this->db->where('kode_ro', $kode_ro);
         $this->db->delete('request_order');
+    }
+
+    public function total_all($field, $where)
+    {
+        $this->db->select_sum($field);
+        if (!empty($where) && count($where) > 0) {
+            $this->db->where($where);
+        }
+        $this->db->from('requestorder');
+        return $this->db->get()->row($field);
+    }
+
+    public function total($field)
+    {
+        $this->db->select_sum($field);
+        $this->db->from('request');
+        return $this->db->get()->row($field);
     }
 }

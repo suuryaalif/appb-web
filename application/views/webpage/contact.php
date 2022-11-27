@@ -6,15 +6,15 @@
 
                 <ul class="contact-info__list list-style--none position-relative z-index-101">
                     <li class="mb-4 pl-4">
-                        <span class="position-absolute"><i class="fas fa-envelope"></i></span> support@bootdey.com
+                        <span class="mr-2"><i class="fas fa-envelope"></i></span> customerservice@cerindo.com
                     </li>
                     <li class="mb-4 pl-4">
-                        <span class="position-absolute"><i class="fas fa-phone"></i></span> (021)-241454-545
+                        <span class="mr-2"><i class="fas fa-phone"></i></span> (021)-241454-545
                     </li>
                     <li class="mb-4 pl-4">
-                        <span class="position-absolute"><i class="fas fa-map-marker-alt"></i></span> bootdey Technologies Inc.
-                        <br> 2694 Queen City Rainbow Drive
-                        <br> Florida 99161
+                        <span class="mr-2"><i class="fas fa-map-marker-alt"></i></span> Jl. Seulawah Raya Komplek Puri Sentra Niaga.
+                        <br> Jakarta Timur
+                        <br> DKI Jakarta 13620
 
                         <div class="mt-3">
                             <a href="https://www.google.com/maps" target="_blank" class="text-link link--right-icon text-white">Get directions <i class="link__icon fa fa-directions"></i></a>

@@ -1,5 +1,5 @@
-<section class="py-5 bg-light" id="scroll-target">
-    <div class="container px-10 my-5">
+<section class="py-5 bg-gradient-light" id="scroll-target">
+    <div class="container px-10 my-5" style="width:fit-content">
 
 
         <div class="text-center">
@@ -11,7 +11,7 @@
                 <div class="col-12 col-md-10 col-lg-8">
                     <?= form_open('webpage/track', 'id="track_code"'); ?>
                     <div class="col">
-                        <input class="form-control form-control-lg form-control-borderless" type="search" name="trackid" placeholder="Masukkan ID Pengajuan Anda">
+                        <input class="form-control form-control-lg form-control-borderless" type="search" name="trackid" placeholder="Masukkan ID Pengajuan Anda" required>
                     </div>
                     <div class="col-auto">
                         <button name="submit" class="btn btn-lg btn-success mt-2" type="submit" value="">Cari</button>
@@ -39,6 +39,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div><?= $this->session->flashdata('msg'); ?></div>
                 </div>
                 <!--end of col-->
             </div>

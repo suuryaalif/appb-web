@@ -20,11 +20,21 @@ class Home extends CI_Controller
             'user' => $this->userModel->get_user_session()
         ];
 
-        $this->load->view('homepage/layouts/header', $data);
-        $this->load->view('homepage/layouts/sidebar', $data);
-        $this->load->view('homepage/layouts/topbar', $data);
-        $this->load->view('homepage/dashboard', $data);
-        $this->load->view('homepage/layouts/footer', $data);
+        if ($this->session->userdata('role_id') == 1) {
+            $this->load->view('homepage/layouts/header', $data);
+            $this->load->view('homepage/layouts/sidebar', $data);
+            $this->load->view('homepage/layouts/topbar', $data);
+            $this->load->view('homepage/db_admin', $data);
+            $this->load->view('homepage/layouts/footer', $data);
+        } elseif ($this->session->userdata('role_id') == 2) {
+            $this->load->view('homepage/layouts/header', $data);
+            $this->load->view('homepage/layouts/sidebar', $data);
+            $this->load->view('homepage/layouts/topbar', $data);
+            $this->load->view('homepage/db_user_req', $data);
+            $this->load->view('homepage/layouts/footer', $data);
+        } else if ($this->session->userdata('role_id' == 3)) {
+            echo "ini approval";
+        }
     }
 
 
