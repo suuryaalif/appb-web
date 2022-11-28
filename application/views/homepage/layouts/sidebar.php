@@ -29,14 +29,9 @@
 
     <!-- ini mengecek menu sesuai dengan role yang diberikan -->
     <?php if ($this->session->userdata('role_id') !== '4') : ?>
-        <!-- <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('requestorder'); ?>">
-                <i class="fas fa-tasks"></i>
-                <span>Request Order</span></a>
-        </li> -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fa-tasks"></i>
+                <i class="fas fa-file-import"></i>
                 <span>Request Order</span>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -50,9 +45,16 @@
 
     <?php if ($this->session->userdata('role_id') == '1' or $this->session->userdata('role_id') == '4') : ?>
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('home'); ?>">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePayment" aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-file-invoice-dollar"></i>
-                <span>Payment Order</span></a>
+                <span>Payment Order</span>
+            </a>
+            <div id="collapsePayment" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href=" <?= base_url('paymentorder'); ?>">Data Payment Order</a>
+                    <a class="collapse-item" href="<?= base_url('paymentorder'); ?>" id="newrequest">Payment Confirmation</a>
+                </div>
+            </div>
         </li>
     <?php endif; ?>
 
@@ -78,7 +80,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('home'); ?>">
+            <a class="nav-link" href="<?= base_url('user_mgm'); ?>">
                 <i class="fas fa-users"></i>
                 <span>User Management</span></a>
         </li>

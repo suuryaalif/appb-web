@@ -116,6 +116,7 @@ class Requestorder extends CI_Controller
 
     public function get_fin_request()
     {
+        $userinfo_temp = $this->session->userdata('nip');
         if ($this->session->userdata('role_id') == 3) {
             $this->session->set_flashdata('msg', '
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -129,7 +130,7 @@ class Requestorder extends CI_Controller
             'title' => 'Form Request2',
             'user' => $this->userModel->get_user_session(),
             'kodeotomatis' => $this->requestModel->AutoCode(),
-            'detail' => $this->requestModel->get_temp_detail()
+            'detail' => $this->requestModel->get_temp_detail($userinfo_temp)->result_array()
         ];
 
         $this->load->view('homepage/layouts/header', $data);

@@ -7,26 +7,32 @@
     <!--panel info-->
     <div class="card border-2 p-3 mb-3">
         <div class="card-header bg-gradient-info text-light text-center">
-            <h5><i>Request Order Info</i></h5>
+            <h5><i>Request Order Info Divisi <?= $user_info['divisi']; ?></i></h5>
         </div>
         <div class="card-body">
             <div class="row">
 
                 <!--query info-->
                 <?php $id = $this->session->userdata('nip');
-                $total = $this->db->get('request_order')->num_rows();
-                $newcreate = array('status_pengajuan' => 1);
-                $statusapprove = array('status_pengajuan' => 3);
-                $statusreject = array('status_pengajuan' => 2);
-                $statusproceed = array('status_pengajuan >' => 3);
-                $statusdone = array('status_pengajuan' => 8);
+                $divisi = $this->session->userdata('id_divisi');
+                $total = $this->db->get_where('request_order', array('divisi' => $divisi))->num_rows();
+                $newcreate = array('divisi' => $divisi, 'status_pengajuan' => 1);
+                $statusapprove = array('divisi' => $divisi, 'status_pengajuan' => 3);
+                $statusreject = array('divisi' => $divisi, 'status_pengajuan' => 2);
+                $statusproceed = array('divisi' => $divisi, 'status_pengajuan >' => 3);
+                $statusdone = array('divisi' => $divisi, 'status_pengajuan' => 8);
                 $disetujui = $this->db->get_where('request_order', $statusapprove)->num_rows();
                 $ditolak = $this->db->get_where('request_order', $statusreject)->num_rows();
                 $diproses = $this->db->get_where('request_order', $statusproceed)->num_rows();
                 $selesai = $this->db->get_where('request_order', $statusdone)->num_rows();
                 $baru = $this->db->get_where('request_order', $newcreate)->num_rows();
 
-
+                $draft = $this->db->get_where('temp_order', array('id_user' => $id))->num_rows();
+                if ($draft >= 1) {
+                    $tampilkan_draft = "1";
+                } else {
+                    $tampilkan_draft = "kosong";
+                }
                 ?>
                 <!---->
 
@@ -44,6 +50,30 @@
                                 <div class="col-auto">
                                     <i class="fas fa-file-import fa-2x text-primary
                         "></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menunggu Approval -->
+                <div class="col-xl-2 col-md-6 mb-4">
+                    <div class="card border-bottom-secondary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1">
+                                        Menuggu Approval</div>
+                                    <!-- kondisi -->
+                                    <?php if ($baru == 0) : ?>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $baru; ?></div>
+                                    <?php else : ?>
+                                        <div class="h5 mb-0 font-weight-bold text-white"><span class="badge badge-danger"><?= $baru; ?></span></div>
+                                    <?php endif; ?>
+                                    <!-- kondisi -->
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-edit fa-2x text-gray"></i>
                                 </div>
                             </div>
                         </div>
@@ -125,5 +155,29 @@
             </div>
         </div>
     </div>
-</div>
+    <div class="row">
+        <div class="card border-left-warning shadow h-100 m-xl-3">
+            <div class="card card-header">
+                <h3>Ketentuan Aplikasi</h3>
+                <div class="card-body">
+                    <p>berikut adalah informasi mengenai sistem aplikasi ini :</p>
+                    <br>
+                    <p>"hak aplikasi anda hanyalah sebagai approval , anda hanya mempunyai akses untuk melihat total request order dari divisi anda dan melakukan approval dari request order yang sesuai divisi anda"</p>
+                </div>
+            </div>
+        </div>
+        <div class="card border-left-warning shadow h-100 mx-xl-3">
+            <div class="card card-header">
+                <h3>Panduan Informasi</h3>
+                <div class="card-body">
+                    <h5>berikut adalah informasi mengenai sistem aplikasi ini :<br>
+                        Aplikasi ini hanya digunakan untuk internal perusahaan, ini berfungsi untuk pengajuan pengadaan barang silahkan download panduan nya dibawah :
+                        <br /><br />
+                        <a href="#" class="badge bg-light"><i class="fas fa-file-download ml-1 mr-2"></i>Panduan Pengadaan Barang</a><br />
+                        <a href="#" class="badge bg-light"><i class="fas fa-file-download ml-1 mr-2"></i>Panduan User</a>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -47,7 +47,10 @@
 <script src="<?= base_url('assets'); ?>/sbadmin/js/sb-admin-2.min.js"></script>
 <script>
     $(document).ready(function() {
-        $("#datatable").dataTable();
+        $("#datatable").dataTable({
+            responsive: true,
+            autoWidth: true
+        });
     });
     $('.alert-message').alert().delay(3500).slideUp('slow');
 

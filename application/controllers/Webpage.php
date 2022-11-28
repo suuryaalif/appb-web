@@ -44,11 +44,6 @@ class Webpage extends CI_Controller
 		$this->load->view('loginpage/index');
 	}
 
-	public function get_registration()
-	{
-		$this->load->view('loginpage/registerform');
-	}
-
 	public function track()
 	{
 		$this->load->model('requestModel');

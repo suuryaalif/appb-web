@@ -9,7 +9,7 @@
             <div><?= $this->session->flashdata('msg'); ?></div>
             <!-- <div><a name="newrequest" id="newrequest" class="btn btn-primary" href="<?= base_url('requestorder/get_pre_request'); ?>" role="button">Tambah Request</a></div> -->
             <div class="table-responsive-md">
-                <table class="table table-sm table-striped dataTable" id="dataTable">
+                <table class="table table-sm table-striped dataTable" id="datatable">
                     <thead align=center>
                         <tr>
                             <th>No</th>

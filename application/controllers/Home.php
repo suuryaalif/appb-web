@@ -15,9 +15,12 @@ class Home extends CI_Controller
 
     public function index()
     {
+        $email = $this->session->userdata('email');
         $data = [
             'title' => 'Home Page',
-            'user' => $this->userModel->get_user_session()
+            'user' => $this->userModel->get_user_session(),
+            'user_info' => $this->userModel->get_user_info($email)
+
         ];
 
         if ($this->session->userdata('role_id') == 1) {
@@ -32,8 +35,19 @@ class Home extends CI_Controller
             $this->load->view('homepage/layouts/topbar', $data);
             $this->load->view('homepage/db_user_req', $data);
             $this->load->view('homepage/layouts/footer', $data);
-        } else if ($this->session->userdata('role_id' == 3)) {
-            echo "ini approval";
+        } else if ($this->session->userdata('role_id') == 3) {
+            $this->load->view('homepage/layouts/header', $data);
+            $this->load->view('homepage/layouts/sidebar', $data);
+            $this->load->view('homepage/layouts/topbar', $data);
+            $this->load->view('homepage/db_user_app', $data);
+            $this->load->view('homepage/layouts/footer', $data);
+        } else {
+
+            $this->load->view('homepage/layouts/header', $data);
+            $this->load->view('homepage/layouts/sidebar', $data);
+            $this->load->view('homepage/layouts/topbar', $data);
+            $this->load->view('homepage/db_user_pay', $data);
+            $this->load->view('homepage/layouts/footer', $data);
         }
     }
 
