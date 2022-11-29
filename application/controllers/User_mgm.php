@@ -76,7 +76,7 @@ class User_mgm extends CI_Controller
             $this->load->view('homepage/layouts/sidebar', $data);
             $this->load->view('homepage/layouts/topbar', $data);
             $this->load->view('userMgm/registrasi_user', $data);
-            $this->load->view('homepage/layouts/footer', $data);;
+            $this->load->view('homepage/layouts/footer', $data);
         } else {
             //Qr code codingan
             $this->load->library('ciqrcode'); //pemanggilan library QR CODE
@@ -133,7 +133,48 @@ class User_mgm extends CI_Controller
             'user' => $this->userModel->get_user_session(),
             'data_user' => $this->userModel->get_byID($id)
         ];
-
+        $this->load->view('homepage/layouts/header', $data);
+        $this->load->view('homepage/layouts/sidebar', $data);
+        $this->load->view('homepage/layouts/topbar', $data);
         $this->load->view('userMgm/editUser', $data);
+        $this->load->view('homepage/layouts/footer', $data);
+    }
+
+    public function update_user()
+    {
+        $id_user = $this->input->post('id', true);
+        $data = [
+            'nama' => $this->input->post('nama', true),
+            'nip' => $this->input->post('nip', true),
+            'email' => $this->input->post('email', true),
+            'alamat_tinggal' => $this->input->post('alamat', true),
+            'no_hp' => $this->input->post('no_hp', true),
+            'role_id' => $this->input->post('role'),
+            'id_divisi' => $this->input->post('id_divisi', true),
+        ];
+        $this->userModel->update_user($data, $id_user);
+        $this->session->set_flashdata('msg', '
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Selamat !</strong> anda berhasil registrasi akun.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button></div>');
+        redirect('user_mgm');
+    }
+
+    public function delete_user()
+    {
+        $id = $this->uri->segment(3);
+        $row_data =  $data = $this->db->get_where('user', array('id_user' => $id))->row();
+        $path = './assets/img/qr-sign/' . $row_data->qr_sign;
+        unlink($path);
+        $this->userModel->delete_byID($id);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Data Berhasil Dihapus !</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+        redirect('user_mgm');
     }
 }

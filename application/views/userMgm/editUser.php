@@ -6,9 +6,12 @@
             Edit
         </div>
         <div class="card-body offset-1 col-9">
-            <?= form_open_multipart('user_mgm/add_new') ?>
-
             <?php foreach ($data_user as $data) : ?>
+                <?= form_open_multipart('user_mgm/update_user/') ?>
+                <?= $this->session->set_flashdata(
+                    'msg'
+                ); ?>
+                <input type="text" id="id" name="id" value="<?= $data['id_user']; ?>" readonly>
                 <div class="form-group row">
                     <input type="text" class="form-control form-control-user" id="nama" name="nama" placeholder="Full Name" value="<?= $data['nama']; ?>">
                     <?= form_error('nama', '<small class="text-danger pl-3">', '</small>'); ?>
@@ -20,14 +23,6 @@
                 <div class="form-group row">
                     <input type="email" class="form-control form-control-user" id="email" name="email" placeholder="Email Address" value="<?= $data['email']; ?>">
                     <?= form_error('email', '<small class="text-danger pl-3">', '</small>'); ?>
-                </div>
-                <div class="form-group row">
-                    <input type="password" class="form-control form-control-user" id="old_password" name="old_password" placeholder="Password">
-                    <?= form_error('password', '<small class="text-danger pl-3">', '</small>'); ?>
-                </div>
-                <div class="form-group row">
-                    <input type="password" class="form-control form-control-user" id="new_password" name="new_password" placeholder="Password">
-                    <?= form_error('password', '<small class="text-danger pl-3">', '</small>'); ?>
                 </div>
                 <div class="form-group row">
                     <input type="text" class="form-control form-control-user" id="alamat" name="alamat" placeholder="Alamat" value="<?= $data['alamat_tinggal']; ?>"><?= form_error('alamat', '<small class="text-danger pl-3">', '</small>'); ?>
@@ -43,7 +38,7 @@
                         <option value="1">admin purchasing</option>
                         <option value="2">user requestion</option>
                         <option value="3">user approval</option>
-                        <option value="4">user payment order</option>
+                        <option value="4">user payment</option>
                     </select>
                 </div>
                 <div class="form-group row">

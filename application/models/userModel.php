@@ -35,4 +35,16 @@ class userModel extends CI_Model
         $this->db->where('id_user', $id);
         return $this->db->get()->result_array();
     }
+
+    public function update_user($data, $id)
+    {
+        $this->db->where('id_user', $id);
+        $this->db->update('user', $data);
+    }
+
+    public function delete_byID($id)
+    {
+        $this->db->where('id_user', $id);
+        $this->db->delete('user');
+    }
 }
