@@ -45,11 +45,11 @@
 
     <?php if ($this->session->userdata('role_id') == '1' or $this->session->userdata('role_id') == '4') : ?>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePayment" aria-expanded="true" aria-controls="collapseTwo">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCBR" aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-file-invoice-dollar"></i>
-                <span>Payment Order</span>
+                <span>Cash Bank Requestion</span>
             </a>
-            <div id="collapsePayment" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div id="collapseCBR" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href=" <?= base_url('paymentorder'); ?>">Data Payment Order</a>
                     <a class="collapse-item" href="<?= base_url('paymentorder'); ?>" id="newrequest">Payment Confirmation</a>
@@ -68,22 +68,22 @@
         </div>
 
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('home'); ?>">
-                <i class="fas fa-shopping-basket"></i>
-                <span>Purchase Order</span></a>
-        </li>
-
-        <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePurchase" aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-boxes"></i>
                 <span>Purchase Order</span>
             </a>
             <div id="collapsePurchase" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href=" <?= base_url('paymentorder'); ?>">Data Purchase Order</a>
-                    <a class="collapse-item" href="<?= base_url('paymentorder'); ?>" id="newrequest">Create Purchase Order</a>
+                    <a class="collapse-item" href=" <?= base_url('purchaseorder'); ?>">Data Purchase Order</a>
+                    <a class="collapse-item" href="<?= base_url('purchaseorder/get_formPrePo') ?>">Create Purchase Order</a>
                 </div>
             </div>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('home'); ?>">
+                <i class="fas fa-shopping-basket"></i>
+                <span>Item Management</span></a>
         </li>
 
         <li class="nav-item">

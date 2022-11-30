@@ -17,6 +17,7 @@
                     <thead>
                         <tr>
                             <th scope="col">No</th>
+                            <th scope="col">Id Supplier</th>
                             <th scope="col">Nama Supplier</th>
                             <th scope="col">Nama PIC</th>
                             <th scope="col">Email Supplier</th>
