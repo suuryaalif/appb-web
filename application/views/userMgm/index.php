@@ -15,7 +15,7 @@
         <div class="card-body">
             <div><?= $this->session->flashdata('msg'); ?></div>
             <div class="table-responsive-md">
-                <table class="table table-sm table-bordered" id="datatable">
+                <table class="table table-responsive-sm table-bordered" id="datatable">
                     <thead align=center>
                         <tr>
                             <th>No</th>
