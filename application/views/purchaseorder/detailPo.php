@@ -8,8 +8,10 @@
         <div class="row">
             <div class="ml-5 mt-3">
                 <a class="btn btn-secondary" href="<?= base_url('purchaseorder') ?>" role="button">Kembali</a>
-                <a class="btn btn-success fa fa-edit" href="<?= base_url('purchaseorder') ?>" role="button"> Edit</a>
-                <a class="btn btn-danger fa fa-file-pdf" href="<?= base_url('purchaseorder/save_pdf/' . $kode) ?>" role="button"> Download</a>
+                <a class="btn btn-success fa fa-edit" href="<?= base_url('purchaseorder/form_edit_po/' . $kode) ?>" role="button">Edit Keterangan Purchase Order</a>
+                <a class="btn btn-danger fa fa-trash-alt" href="<?= base_url('purchaseorder/delete_po/' . $kode) ?>" role="button"> Hapus Seluruh Data PO</a>
+                <a class="btn btn-info far fa-plus-square" href="<?= base_url('purchaseorder/form_add_detail/' . $kode) ?>" role="button"> Tambah Barang</a>
+                <a class="btn btn-warning fa fa-file-pdf" href="<?= base_url('purchaseorder/save_pdf/' . $kode) ?>" role="button"> Download</a>
             </div>
         </div>
         <div><?= $this->session->flashdata('msg'); ?></div>
@@ -73,6 +75,8 @@
                                 <th scope="col">Keterangan Barang</th>
                                 <th scope="col">Jumlah Order</th>
                                 <th scope="col">Satuan Order</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,6 +91,8 @@
                                     <td><?= $row['desk_barang']; ?></td>
                                     <td><?= $row['qty_order']; ?></td>
                                     <td><?= $row['sat_order']; ?></td>
+                                    <td><a class="btn btn-success fa fa-edit" href="<?= base_url('purchaseorder/edit_detail/' . $row['id_dpo']) ?>" role="button"></a></td>
+                                    <td><a class="btn btn-danger fa fa-trash-alt" href="<?= base_url('purchaseorder/delete_detail/' . $row['id_dpo']) ?>" role="button"></a></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

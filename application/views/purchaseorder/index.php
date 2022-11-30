@@ -17,8 +17,6 @@
                             <th scope="col">Nama Supplier</th>
                             <th scope="col">Tgl PO</th>
                             <th scope="col" hidden></th>
-                            <th scope="col" hidden></th>
-                            <th scope="col" hidden></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,9 +30,7 @@
                                 <td><?= $dt['desk_po']; ?></td>
                                 <td><?= $dt['nama_sup']; ?></td>
                                 <td><?= $dt['tgl_po']; ?></td>
-                                <td><a class="btn btn-info fa fa-eye" href="<?= base_url('purchaseorder/detail/' . $dt['kode_po']); ?>" role="button"> Detail</a></td>
-                                <td><a class="btn btn-success fa fa-edit" href="<?= base_url('purchaseorder/edit/' . $dt['kode_po']); ?>" role="button"> edit</a></td>
-                                <td><a class="btn btn-danger fas fa-trash-alt" href="<?= base_url('purchaseorder/delete/' . $dt['kode_po']); ?>" role="button"> Hapus</a></td>
+                                <td><a class="btn btn-info fa fa-eye" href="<?= base_url('purchaseorder/detail/' . $dt['kode_po']); ?>" role="button">Detail</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

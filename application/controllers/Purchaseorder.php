@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 use Dompdf\Options;
 use Dompdf\Dompdf;
+use FontLib\Table\Type\post;
 
 class Purchaseorder extends CI_Controller
 {
@@ -162,6 +163,158 @@ class Purchaseorder extends CI_Controller
         redirect('purchaseorder/get_formPrePo');
     }
 
+    public function save_po_edited($kode)
+    {
+        $data = [
+            'kode_po' => $this->input->post('kode_po', true),
+            'kode_ro' => $this->input->post('kode_ro', true),
+            'desk_po' => $this->input->post('desk_po', true),
+            'id_supplier' => $this->input->post('id_sup', true),
+            'tgl_po' => $this->input->post('tgl_po', true)
+        ];
+        $this->purchaseModel->update_po($data, $kode);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Purchase Order berhasil diubah !</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+        redirect('purchaseorder/detail/' . $kode);
+    }
+
+    public function edit_detail($id)
+    {
+        $kode = $this->purchaseModel->get_kodebyID($id);
+        $data = [
+            'title' => 'Edit PO',
+            'user' => $this->userModel->get_user_session(),
+            'kode_po' => $kode['kode_purchase'],
+            'detail_po' => $this->purchaseModel->get_detailbyID($id),
+        ];
+
+        $this->load->view('homepage/layouts/header', $data);
+        $this->load->view('homepage/layouts/sidebar', $data);
+        $this->load->view('homepage/layouts/topbar', $data);
+        $this->load->view('purchaseorder/edit_detail', $data);
+        $this->load->view('homepage/layouts/footer', $data);
+    }
+
+    public function update_detail($id)
+    {
+        $kode_po = $this->input->post('kode_purchase');
+        $data = [
+            'kode_purchase' => $this->input->post('kode_purchase', true),
+            'jenis_barang' => $this->input->post('jenis_barang', true),
+            'desk_barang' => $this->input->post('desk_barang', true),
+            'qty_order' => $this->input->post('qty_order', true),
+            'sat_order' => $this->input->post('sat_order', true)
+        ];
+        $this->purchaseModel->update_detail($data, $id);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Detail diubah !</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+        redirect('purchaseorder/detail/' . $kode_po);
+    }
+
+    public function delete_detail($id)
+    {
+        $kode = $this->purchaseModel->get_kodebyID($id);
+        $kode_po = $kode['kode_purchase'];
+        $this->purchaseModel->delete_detail($id);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Detail dihapus !</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+        redirect('purchaseorder/detail/' . $kode_po);
+    }
+
+    function delete_po($kode_po)
+    {
+        $this->purchaseModel->delete_all_detail($kode_po);
+        $this->purchaseModel->delete_po($kode_po);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Data PO dihapus !</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+        redirect('purchaseorder');
+    }
+
+    public function form_add_detail($kode_po)
+    {
+        $data = [
+            'title' => 'Tambah Detail PO',
+            'user' => $this->userModel->get_user_session(),
+            'kode_po' => $kode_po,
+        ];
+
+        $this->load->view('homepage/layouts/header', $data);
+        $this->load->view('homepage/layouts/sidebar', $data);
+        $this->load->view('homepage/layouts/topbar', $data);
+        $this->load->view('purchaseorder/add_detail', $data);
+        $this->load->view('homepage/layouts/footer', $data);
+    }
+
+    public function form_edit_po($kode_po)
+    {
+        $data = [
+            'title' => 'Tambah Detail PO',
+            'user' => $this->userModel->get_user_session(),
+            'kode_po' => $kode_po,
+            'data_po' => $this->purchaseModel->get_PobyCode($kode_po),
+            'supplier' => $this->purchaseModel->get_sup(),
+            'ro' => $this->purchaseModel->get_ro()
+        ];
+
+        $this->load->view('homepage/layouts/header', $data);
+        $this->load->view('homepage/layouts/sidebar', $data);
+        $this->load->view('homepage/layouts/topbar', $data);
+        $this->load->view('purchaseorder/edit_purchase', $data);
+        $this->load->view('homepage/layouts/footer', $data);
+    }
+
+    public function add_detail()
+    {
+        $kode_purchase = $this->input->post('kode_purchase');
+        $this->form_validation->set_rules('qty_order', 'Qty_order', 'required|numeric');
+
+        if ($this->form_validation->run() == false) {
+            $data = [
+                'title' => 'Tambah Detail PO',
+                'user' => $this->userModel->get_user_session(),
+                'kode_po' => $kode_purchase,
+            ];
+
+            $this->load->view('homepage/layouts/header', $data);
+            $this->load->view('homepage/layouts/sidebar', $data);
+            $this->load->view('homepage/layouts/topbar', $data);
+            $this->load->view('purchaseorder/add_detail', $data);
+            $this->load->view('homepage/layouts/footer', $data);
+        } else {
+
+            $data = [
+                'kode_purchase' => $this->input->post('kode_purchase', true),
+                'jenis_barang' => $this->input->post('jenis_barang', true),
+                'desk_barang' => $this->input->post('desk_barang', true),
+                'qty_order' => $this->input->post('qty_order', true),
+                'sat_order' => $this->input->post('sat_order', true)
+            ];
+            $this->db->insert('detail_purchase', $data);
+            $this->session->set_flashdata('msg', '
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Data ditambahkan !</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+            redirect('purchaseorder/detail/' . $kode_purchase);
+        }
+    }
     public function save_pdf($kode_po)
     {
         $data = [

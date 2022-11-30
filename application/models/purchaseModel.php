@@ -54,6 +54,52 @@ class purchaseModel extends CI_Model
         return $this->db->get_where('detail_purchase', array('kode_purchase' => $kode_po))->result_array();
     }
 
+    public function get_kodebyID($id)
+    {
+        $this->db->select('kode_purchase');
+        $this->db->from('detail_purchase');
+        $this->db->where('id_dpo', $id);
+        return $this->db->get()->row_array();
+    }
+
+    public function get_detailbyID($id = null)
+    {
+        if ($id == null) {
+            return $this->db->get('detail_purchase')->result_array();
+        }
+        return $this->db->get_where('detail_purchase', array('id_dpo' => $id))->result_array();
+    }
+
+    public function update_detail($data, $id)
+    {
+        $this->db->where('id_dpo', $id);
+        $this->db->update('detail_purchase', $data,);
+    }
+
+    public function update_po($data, $kode_po)
+    {
+        $this->db->where('kode_po', $kode_po);
+        $this->db->update('purchase_order', $data,);
+    }
+
+    public function delete_detail($id)
+    {
+        $this->db->where('id_dpo', $id);
+        $this->db->delete('detail_purchase');
+    }
+
+    public function delete_po($kode_po)
+    {
+        $this->db->where('kode_po', $kode_po);
+        $this->db->delete('purchase_order');
+    }
+
+    public function delete_all_detail($kode_po)
+    {
+        $this->db->where('kode_purchase', $kode_po);
+        $this->db->delete('detail_purchase');
+    }
+
     public function AutoCode()
     {
         $this->db->select('RIGHT(purchase_order.kode_po,3) as kodepo', FALSE);
