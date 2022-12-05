@@ -5,6 +5,11 @@
     <h1 class="h3 mb-4 ml-5 text-gray-800">Edit Cashbank Requestion</h1>
     <!-- Page Body -->
     <div class="card">
+        <div class="row">
+            <div class="col-1 ml-2 p-3">
+                <a class="btn btn-secondary" href="<?= base_url('cashbank') ?>" role="button">Kembali</a>
+            </div>
+        </div>
         <div><?= $this->session->flashdata('msg'); ?></div>
         <div class="card-header">
             <h5>Silahkan Edit Formulir Dibawah Ini</h5>
@@ -58,9 +63,11 @@
                         <label class="mt-2">Tanggal Pengajuan</label>
                         <?= form_error('tgl_cbr', '<small class="text-danger pl-3">', '</small>'); ?>
                         <input value="<?= $cbr['tgl_cbr']; ?>" type="date" name="tgl_cbr" id="tgl_cbr" class="form-control mb-1">
-                        <div class="mt-4 offset-lg-10">
-                            <button type="submit" class="btn btn-primary">Simpan</button>
-                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mt-4 offset-6">
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </div>
                 <?= form_close(); ?>

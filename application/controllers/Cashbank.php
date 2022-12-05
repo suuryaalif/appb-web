@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use Dompdf\Options;
+use Dompdf\Dompdf;
+use FontLib\Table\Type\post;
+
 class Cashbank extends CI_Controller
 {
     public function __construct()
@@ -213,5 +217,71 @@ class Cashbank extends CI_Controller
             </button></div>');
             redirect('cashbank');
         }
+    }
+
+    public function approve($id)
+    {
+
+        $this->cashbankModel->approve($id);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Disetujui ! berhasil menyetujui cashbank requestion</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+        redirect('cashbank');
+    }
+
+    public function reject($id)
+    {
+        $this->cashbankModel->reject($id);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Ditolak ! berhasil menolak cashbank requestion</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+        redirect('cashbank');
+    }
+
+    public function save_pdf()
+    {
+        $id = $this->uri->segment(3);
+        $kode_ro = $this->uri->segment(4);
+        $kode_po = $this->uri->segment(5);
+        $user_pay = $this->cashbankModel->approval_name();
+
+        $data = [
+            'title' => 'Cashbank Download',
+            'user' => $this->userModel->get_user_session(),
+            'cashbank' => $this->cashbankModel->get_cbr($id),
+            'data_ro' => $this->requestModel->get_requestbyKode($kode_ro),
+            'data_detail_ro' => $this->requestModel->get_detailbyKode($kode_ro),
+            'approval_pay' => $user_pay['nama'],
+            'approval_qr' => $user_pay['qr_sign'],
+            'data_po' => $this->db->get_where('purchase_order', array('kode_po' => $kode_po))->result_array(),
+            'data_detail_po' => $this->purchaseModel->get_detailbyCode($kode_po)
+        ];
+
+        // var_dump($data['approval_qr']);
+        // die;
+
+        $sroot      = $_SERVER['DOCUMENT_ROOT'];
+        include $sroot . "/appb-web/application/third_party/dompdf/autoload.inc.php";
+
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $dompdf = new Dompdf($options);
+        $this->load->view('cashbank/pdf', $data);
+        $paper_size = 'A4'; // ukuran kertas
+        $orientation = 'potrait'; //tipe format kertas potrait atau landscape
+        $html = $this->output->get_output();
+        $dompdf->setPaper($paper_size, $orientation);
+        //Convert to PDF
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+        ob_end_clean();
+        $dompdf->stream("cashbank.pdf", array('Attachment' => 0));
+        // nama file pdf yang di hasilkan
     }
 }

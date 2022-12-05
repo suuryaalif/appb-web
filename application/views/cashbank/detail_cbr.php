@@ -8,7 +8,9 @@
     <div class="row">
         <div class="ml-5 mt-3">
             <a class="btn btn-secondary" href="<?= base_url('cashbank') ?>" role="button">Kembali</a>
-            <a class="btn btn-warning fa fa-file-pdf" href="<?= base_url('purchaseorder/save_pdf/') ?>" role="button"> Download</a>
+            <?php foreach ($cashbank as $cbr) : ?>
+                <a class="btn btn-warning fa fa-file-pdf" href="<?= base_url('cashbank/save_pdf/' . $cbr['id_cbr'] . '/' . $cbr['kode_req'] . '/' . $cbr['kode_pur']) ?>" role="button"> Download</a>
+            <?php endforeach; ?>
         </div>
     </div>
     <div class="card justify-content-center col-md">
@@ -52,9 +54,13 @@
                             <td><?= $cbr['cara_byr']; ?></td>
                         </tr>
                         <tr>
-                            <th style="width:180px;">Tanggal Approval</th>
+                            <th style="width:180px;">Waktu Approval</th>
                             <td style="width:20px;">:</td>
-                            <td></td>
+                            <?php if ($cbr['approve_time'] != 0) : ?>
+                                <td><?= date('d-F-Y H:i:s', $cbr['approve_time']); ?></td>
+                            <?php else : ?>
+                                <td>belum ada approval</td>
+                            <?php endif; ?>
                         </tr>
                     </table>
                     <?php if ($this->session->userdata('role_id') == '4') : ?>
@@ -152,7 +158,7 @@
                     Anda Yakin ?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success">Ya Lanjutkan</button>
+                    <a name="approve" id="approve" class="btn btn-success" href="<?= base_url('cashbank/approve/' . $cbr['id_cbr']) ?>" role="button">Yakin</a>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
                 </div>
             </div>
@@ -171,7 +177,7 @@
                     Anda Yakin ?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger">Ya Lanjutkan</button>
+                    <a name="approve" id="approve" class="btn btn-danger" href="<?= base_url('cashbank/reject/' . $cbr['id_cbr']) ?>" role="button">Yakin</a>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Kembali</button>
                 </div>
             </div>

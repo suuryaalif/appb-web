@@ -68,4 +68,34 @@ class cashbankModel extends CI_Model
         $this->db->where('id_cbr', $id);
         $this->db->delete('cashbank_requestion');
     }
+
+    public function approve($id)
+    {
+        $array = [
+            'status_cbr' => 3,
+            'approve_time' => time()
+        ];
+
+        $this->db->where('id_cbr', $id);
+        $this->db->update('cashbank_requestion', $array);
+    }
+
+    public function reject($id)
+    {
+        $array = [
+            'status_cbr' => 2,
+            'approve_time' => time()
+        ];
+
+        $this->db->where('id_cbr', $id);
+        $this->db->update('cashbank_requestion', $array);
+    }
+
+    public function approval_name()
+    {
+        $this->db->select('*');
+        $this->db->from('user');
+        $this->db->where('role_id', 4);
+        return $this->db->get()->row_array();
+    }
 }

@@ -5,6 +5,7 @@
     <h1 class="h3 mb-4 text-gray-800"><i>Selamat Datang <?= $user['nama']; ?></i></h1>
 
     <!--panel info-->
+    <!--Request Order info-->
     <div class="card border-2 p-3 mb-3">
         <div class="card-header bg-gradient-info text-light text-center">
             <h5><i>Request Order Info</i></h5>
@@ -125,6 +126,7 @@
             </div>
         </div>
     </div>
+    <!--Purchase Order info-->
     <div class="card border-2 p-3 mb-3">
         <div class="card-header bg-gradient-info text-light text-center">
             <h5><i>Purchase Order Info</i></h5>
@@ -135,6 +137,42 @@
                 <!--query info-->
                 <?php $id = $this->session->userdata('nip');
                 $total = $this->db->get('purchase_order')->num_rows();
+                ?>
+                <!---->
+
+                <!-- PO Total -->
+                <div class="col-xl-2 col-md-6 mb-4">
+                    <div class="card border-bottom-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-uppercase mb-1">
+                                        <i>Total</i>
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold"><?= $total; ?></div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file-import fa-2x text-primary
+                        "></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Cash Bank Requestion Order info-->
+    <div class="card border-2 p-3 mb-3">
+        <div class="card-header bg-gradient-info text-light text-center">
+            <h5><i>Cash Bank Requstion Info</i></h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+
+                <!--query info-->
+                <?php $id = $this->session->userdata('nip');
+                $total = $this->db->get('cashbank_requestion')->num_rows();
                 ?>
                 <!---->
 
