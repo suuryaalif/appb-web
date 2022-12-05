@@ -34,6 +34,7 @@ class purchaseModel extends CI_Model
     {
         $this->db->select('kode_ro');
         $this->db->from('request_order');
+        $this->db->where('status_pengajuan >', 2);
         return $this->db->get()->result_array();
     }
 

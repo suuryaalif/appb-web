@@ -51,8 +51,11 @@
             </a>
             <div id="collapseCBR" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href=" <?= base_url('paymentorder'); ?>">Data Payment Order</a>
-                    <a class="collapse-item" href="<?= base_url('paymentorder'); ?>" id="newrequest">Payment Confirmation</a>
+                    <a class="collapse-item" href=" <?= base_url('cashbank'); ?>">Data Cash Bank Requestion</a>
+                    <?php if ($this->session->userdata('role_id') == '4') : ?>
+                        <a class="collapse-item" href="<?= base_url('cashbank'); ?>" id="newrequest">Payment Transaction</a>
+                    <?php endif; ?>
+                    <a class="collapse-item" href=" <?= base_url('cashbank/get_form_create'); ?>">New Cashbank Requestion</a>
                 </div>
             </div>
         </li>

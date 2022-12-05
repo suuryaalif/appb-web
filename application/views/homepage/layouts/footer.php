@@ -48,15 +48,16 @@
 <script>
     $(document).ready(function() {
         $("#datatable").dataTable({
-            responsive: true,
-            autoWidth: true
+            autoWidth: true,
+            responsive: true
         });
     });
+
     $('.alert-message').alert().delay(3500).slideUp('slow');
 
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()
-    })
+    });
 </script>
 
 </body>
