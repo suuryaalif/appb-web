@@ -63,7 +63,7 @@
                             <?php endif; ?>
                         </tr>
                     </table>
-                    <?php if ($this->session->userdata('role_id') == '4') : ?>
+                    <?php if ($this->session->userdata('role_id') == '4' and ($cbr['status_cbr'] < 10)) : ?>
                         <div class="text-center">
                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalApprove">
                                 Approve

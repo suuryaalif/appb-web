@@ -53,7 +53,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href=" <?= base_url('cashbank'); ?>">Data Cash Bank Requestion</a>
                     <?php if ($this->session->userdata('role_id') == '4') : ?>
-                        <a class="collapse-item" href="<?= base_url('cashbank'); ?>" id="newrequest">Payment Transaction</a>
+                        <a class="collapse-item" href="<?= base_url('cashbank/get_pay_data'); ?>" id="newrequest">Payment Transaction</a>
                     <?php elseif ($this->session->userdata('role_id') == '1') : ?>
                         <a class="collapse-item" href=" <?= base_url('cashbank/get_form_create'); ?>">New Cashbank Requestion</a>
                     <?php endif; ?>

@@ -60,6 +60,22 @@ class Cashbank extends CI_Controller
         $this->load->view('homepage/layouts/footer', $data);
     }
 
+    public function get_pay_data()
+    {
+        $data = [
+            'title' => 'Data Pembayaran',
+            'user' => $this->userModel->get_user_session(),
+            'payment' => $this->cashbankModel->get_pay()
+        ];
+
+        $this->load->view('homepage/layouts/header', $data);
+        $this->load->view('homepage/layouts/sidebar', $data);
+        $this->load->view('homepage/layouts/topbar', $data);
+        $this->load->view('cashbank/data_payment', $data);
+        $this->load->view('homepage/layouts/footer', $data);
+    }
+
+
     public function get_form_create()
     {
         $data = [
@@ -244,6 +260,84 @@ class Cashbank extends CI_Controller
         redirect('cashbank');
     }
 
+    public function get_form_confirm()
+    {
+        $id_cbr = $this->uri->segment(3);
+        $status = $this->db->get_where('cashbank_requestion', array('id_cbr' => $id_cbr))->row_array();
+
+        if ($status['status_cbr'] < 3) {
+            $this->session->set_flashdata('msg', '
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Permintaan Ditolak! CBR harus sudah disetujui</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button></div>');
+            redirect('cashbank');
+        } else {
+
+            $data = [
+                'title' => 'Payment Confirmation',
+                'user' => $this->userModel->get_user_session(),
+                'kodeotomatis' => $this->cashbankModel->AutoCodePayment(),
+                'cashbank' => $status,
+            ];
+
+
+            // var_dump($data);
+            // die;
+
+            $this->load->view('homepage/layouts/header', $data);
+            $this->load->view('homepage/layouts/sidebar', $data);
+            $this->load->view('homepage/layouts/topbar', $data);
+            $this->load->view('cashbank/confirm_pay', $data);
+            $this->load->view('homepage/layouts/footer', $data);
+        }
+    }
+
+    public function save_confirm()
+    {
+        $id_cbr = $this->uri->segment(3);
+        $kode_ro = $this->uri->segment(4);
+        $kode_po = $this->uri->segment(5);
+        $back = $id_cbr . '/' . $kode_ro . '/' . $kode_po;
+
+        //konfigurasi sebelum gambar diupload
+        $config['upload_path'] = './assets/img/foto-bayar/';
+        $config['allowed_types'] = 'jpg|png|jpeg';
+        $config['max_size'] = '5000';
+        $config['max_width'] = '3000';
+        $config['max_height'] = '3000';
+        $config['file_name'] = 'img-paid-' . date('dmY_His') . '.jpg';
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload('bukti_byr')) {
+            $error_msg = $this->upload->display_errors();
+            $this->session->set_flashdata('error', '
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>' . $error_msg . '</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button></div>');
+            redirect('cashbank/get_form_confirm/' . $back, $error_msg);
+        } else {
+            $image = $this->upload->data();
+            $gambar = $image['file_name'];
+
+            $data = [
+                'kode_byr' => $this->input->post('kode_byr', true),
+                'kode_cbr' => $this->input->post('kode_cbr', true),
+                'total_byr' => $this->input->post('total_byr', true),
+                'tgl_byr' => $this->input->post('tgl_byr', true),
+                'bukti_byr' => $gambar
+            ];
+
+            $this->cashbankModel->add_pay($data);
+            $this->cashbankModel->set_confirm($id_cbr);
+
+            redirect('cashbank');
+        }
+    }
+
     public function save_pdf()
     {
         $id = $this->uri->segment(3);
@@ -282,6 +376,44 @@ class Cashbank extends CI_Controller
         $dompdf->render();
         ob_end_clean();
         $dompdf->stream("cashbank.pdf", array('Attachment' => 0));
+        // nama file pdf yang di hasilkan
+    }
+
+    public function download_bukti()
+    {
+        $id = $this->uri->segment(3);
+        $cbr = $this->cashbankModel->get_ro($id);
+        $qr_usrpay = $this->cashbankModel->get_qr_usp();
+        $id_sp = $cbr['id_supplier'];
+        $kd_po = $cbr['kode_pur'];
+
+        $data = [
+            'title' => 'Bukti Pembayaran',
+            'user' => $this->userModel->get_user_session(),
+            'payment' => $this->cashbankModel->get_pay($id),
+            'qr_aprv' => $qr_usrpay['qr_sign'],
+            'supplier' => $this->supplierModel->get_data($id_sp),
+            'data_po' => $this->db->get_where('purchase_order', array('kode_po' => $kd_po))->result_array()
+        ];
+        // var_dump($data['qr_aprv']);
+        // die;
+
+        $sroot      = $_SERVER['DOCUMENT_ROOT'];
+        include $sroot . "/appb-web/application/third_party/dompdf/autoload.inc.php";
+
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $dompdf = new Dompdf($options);
+        $this->load->view('cashbank/payment_pdf', $data);
+        $paper_size = 'A4'; // ukuran kertas
+        $orientation = 'potrait'; //tipe format kertas potrait atau landscape
+        $html = $this->output->get_output();
+        $dompdf->setPaper($paper_size, $orientation);
+        //Convert to PDF
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+        ob_end_clean();
+        $dompdf->stream("paymentinfo.pdf", array('Attachment' => 0));
         // nama file pdf yang di hasilkan
     }
 }

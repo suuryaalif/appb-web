@@ -41,6 +41,7 @@
                                         <a class="btn btn-danger fa fa-trash-alt" href="<?= base_url('cashbank/delete_cbr/' . $cbr['id_cbr']); ?>" role="button"></a>
                                     <?php elseif ($this->session->userdata('role_id') == '4') : ?>
                                         <a class="btn btn-info fa fa-eye" href="<?= base_url('cashbank/detail/' . $cbr['id_cbr'] . '/' . $cbr['kode_req'] . '/' . $cbr['kode_pur']); ?>" role="button"></a>
+                                        <a class="btn btn-success" href="<?= base_url('cashbank/get_form_confirm/' . $cbr['id_cbr'] . '/' . $cbr['kode_req'] . '/' . $cbr['kode_pur']); ?>" role="button"><i>Proses Bayar</i></a>
                                     <?php endif; ?>
                                 </td>
                             </tr>

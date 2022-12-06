@@ -219,8 +219,8 @@
         <br />
         <br />
         <br />
-        <p style="font-size:14px ;text-align:center">
-            Purchase Order ini ditanda tangani secara digital , sehingga tidak memerlukan stamp basah dan tanda tangan asli.
+        <p style="font-size:10px ;text-align:center">
+            Dokumen ini ditanda tangani secara digital , sehingga tidak memerlukan stamp basah dan tanda tangan asli.
         </p>
     <?php endforeach; ?>
     <br />

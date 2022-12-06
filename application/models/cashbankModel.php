@@ -28,6 +28,32 @@ class cashbankModel extends CI_Model
         return $this->db->get()->result_array();;
     }
 
+    public function get_pay($id = null)
+    {
+        if ($id != null) {
+            return $this->db->get_where('pembayaran', array('id_byr' => $id))->result_array();
+        } else {
+            return $this->db->get('pembayaran')->result_array();
+        }
+    }
+
+    public function get_qr_usp()
+    {
+        $this->db->select('qr_sign');
+        $this->db->from('user');
+        $this->db->where('role_id', 4);
+        return $this->db->get()->row_array();
+    }
+
+
+    public function get_ro($id)
+    {
+        $this->db->select('*');
+        $this->db->from('cashbank_requestion');
+        $this->db->where('id_cbr', $id);
+        return $this->db->get()->row_array();
+    }
+
     public function AutoCode()
     {
         $this->db->select('RIGHT(cashbank_requestion.kode_cbr,3) as kodecbr', FALSE);
@@ -45,6 +71,23 @@ class cashbankModel extends CI_Model
         return $kodetampil;
     }
 
+    public function AutoCodePayment()
+    {
+        $this->db->select('RIGHT(pembayaran.kode_byr,3) as kodebyr', FALSE);
+        $this->db->order_by('kodebyr', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get('pembayaran');
+        if ($query->num_rows() <> 0) {
+            $data = $query->row();
+            $kode = intval($data->kodebyr) + 1;
+        } else {
+            $kode = 1;
+        }
+        $batas = str_pad($kode, 3, "0", STR_PAD_LEFT);
+        $kodetampil = "TFFN" . $batas;
+        return $kodetampil;
+    }
+
     public function get_po()
     {
         $this->db->select('kode_po');
@@ -55,6 +98,11 @@ class cashbankModel extends CI_Model
     public function add_cbr($data)
     {
         $this->db->insert('cashbank_requestion', $data);
+    }
+
+    public function add_pay($data)
+    {
+        $this->db->insert('pembayaran', $data);
     }
 
     public function update($id, $data)
@@ -89,6 +137,14 @@ class cashbankModel extends CI_Model
 
         $this->db->where('id_cbr', $id);
         $this->db->update('cashbank_requestion', $array);
+    }
+
+    public function set_confirm($id)
+    {
+
+        $this->db->where('id_cbr', $id);
+        $this->db->set('status_cbr', 10);
+        $this->db->update('cashbank_requestion');
     }
 
     public function approval_name()
