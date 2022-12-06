@@ -98,4 +98,27 @@ class cashbankModel extends CI_Model
         $this->db->where('role_id', 4);
         return $this->db->get()->row_array();
     }
+
+    public function num_new()
+    {
+        $this->db->select('*');
+        $this->db->from('cashbank_requestion');
+        $this->db->where('status_cbr', 1);
+        return $this->db->get()->num_rows();
+    }
+
+    public function num_approve()
+    {
+        return $this->db->get_where('cashbank_requestion', array('status_cbr' => 3))->num_rows();
+    }
+
+    public function num_reject()
+    {
+        return $this->db->get_where('cashbank_requestion', array('status_cbr' => 2))->num_rows();
+    }
+
+    public function num_paid()
+    {
+        return $this->db->get_where('cashbank_requestion', array('status_cbr' => 10))->num_rows();
+    }
 }

@@ -31,6 +31,11 @@
                     <option>Alat Safety</option>
                     <option>Alat Packing</option>
                     <option>Seragam/Pakaian</option>
+                    <option>Kendaraan</option>
+                    <option>Aksesoris Kendaraan</option>
+                    <option>Spare Part Kendaraan</option>
+                    <option>AC</option>
+                    <option>Aksesoris AC</option>
                     <option>lain-lain</option>
                 </select>
                 <label class="mt-2">Deskripsi Barang</label>

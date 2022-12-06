@@ -11,7 +11,7 @@
                 <?= $this->session->set_flashdata(
                     'msg'
                 ); ?>
-                <input type="text" id="id" name="id" value="<?= $data['id_user']; ?>" readonly>
+                <input type="hidden" id="id" name="id" value="<?= $data['id_user']; ?>" readonly>
                 <div class="form-group row">
                     <input type="text" class="form-control form-control-user" id="nama" name="nama" placeholder="Full Name" value="<?= $data['nama']; ?>">
                     <?= form_error('nama', '<small class="text-danger pl-3">', '</small>'); ?>
@@ -34,7 +34,7 @@
                 <div class="form-group row">
                     <label>select role :</label>
                     <select class="form-control" id="role" name="role" value="<?= set_value('role'); ?>">
-                        <option value="<?= $data['role_id']; ?>" disabled selected><?= $data['role user']; ?></option>
+                        <option value="<?= $data['role_id']; ?>" selected><?= $data['role user']; ?></option>
                         <option value="1">admin purchasing</option>
                         <option value="2">user requestion</option>
                         <option value="3">user approval</option>
@@ -44,7 +44,7 @@
                 <div class="form-group row">
                     <label>select division :</label>
                     <select class="form-control" id="id_divisi" name="id_divisi">
-                        <option value="<?= $data['id_divisi']; ?>" disabled selected><?= $data['divisi']; ?></option>
+                        <option value="<?= $data['id_divisi']; ?>" selected><?= $data['divisi']; ?></option>
                         <option value="1">Keuangan</option>
                         <option value="2">Ops Kantor</option>
                         <option value="3">Ops Lapangan</option>

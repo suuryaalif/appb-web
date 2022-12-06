@@ -155,7 +155,7 @@ class User_mgm extends CI_Controller
         $this->userModel->update_user($data, $id_user);
         $this->session->set_flashdata('msg', '
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Selamat !</strong> anda berhasil registrasi akun.
+            <strong>Selamat !</strong> anda berhasil merubah data.
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button></div>');
