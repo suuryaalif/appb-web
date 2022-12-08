@@ -33,15 +33,7 @@
                                     <tr>
                                         <td>Hak Akses</td>
                                         <td>:</td>
-                                        <td><?php if ($user['role_id'] == 2) {
-                                                echo "user requestion";
-                                            } elseif ($user['role_id'] == 3) {
-                                                echo "user approval";
-                                            } elseif ($user['role_id'] == 4) {
-                                                echo "user payment";
-                                            } else {
-                                                echo "Admin Purchasing";
-                                            } ?></td>
+                                        <td><?= $user['role user']; ?></td>
                                     </tr>
                                     <tr>
                                         <td>User sejak</td>
@@ -49,7 +41,7 @@
                                         <td><?= date('d F Y', $user['created_at']); ?></td>
                                     </tr>
                                     <tr>
-                                        <td><a class="btn btn-primary" href="#">Edit</a></td>
+                                        <td><a class="btn btn-primary" href="<?= base_url('home/edit/' . $user['id_user']); ?>">Edit</a></td>
                                     </tr>
                                 </tbody>
                             </table>

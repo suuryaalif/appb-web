@@ -56,7 +56,7 @@
                 <?php elseif ($req['status_pengajuan'] == 2) : ?>
                     <?php if ($this->session->userdata('role_id') == 1 or $this->session->userdata('role_id') == 2) : ?>
                         <div class="col-sm-auto">
-                            <a class="btn btn-warning" href="<?= base_url('requestorder/get_data_edit/') . $req['kode_ro']; ?>" role="button"><i class="fa fa-edit"></i>
+                            <a class="btn btn-info" href="<?= base_url('requestorder/get_data_edit/') . $req['kode_ro']; ?>" role="button"><i class="fa fa-edit"></i>
                                 Perbaiki</a>
                         </div>
                         <div class="col-sm-auto">
@@ -65,12 +65,10 @@
                         </div>
                     <?php endif; ?>
                 <?php elseif ($req['status_pengajuan'] > 2) : ?>
-                    <div class="col-md-auto">
-                        <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="order telah melewati proses approval"><i class="fas fa-info"></i></button>
-                    </div>
+
                 <?php endif; ?>
-                <div class=" col-md-auto">
-                    <a name="kembali" id="kembali" class="btn btn-danger" href="<?= base_url('requestorder/save_pdf/' . $req['kode_ro']); ?>" role="button"><i class="fa fa-file-pdf"></i>Download</a>
+                <div class=" col-sm-auto">
+                    <a name="kembali" id="kembali" class="btn btn-warning" href="<?= base_url('requestorder/save_pdf/' . $req['kode_ro']); ?>" role="button"><i class="fa fa-file-pdf"></i>Download</a>
                 </div>
             </div>
     </div>
@@ -127,7 +125,7 @@
                             <th>Satuan</th>
                             <th>foto rekomendasi</th>
                             <th>Status</th>
-                            <?php if ($user['role_id'] == 3) : ?>
+                            <?php if ($user['role_id'] == 3 and $req['status_pengajuan'] < 3) : ?>
                                 <th>Aksi</th>
                             <?php endif; ?>
                         </tr>
@@ -147,7 +145,7 @@
                                 <td><?= $row['status_info'] ?></td>
                                 <td>
                                     <!--tombol approval/reject-->
-                                    <?php if ($user['role_id'] == 3) : ?>
+                                    <?php if ($user['role_id'] == 3 and $req['status_pengajuan'] < 3) : ?>
                                         <?php if ($row['status_detail'] == 1) : ?>
                                             <!--blm approve/reject-->
                                             <a class="btn btn-success" href="<?= base_url('requestorder/approve_detail/'); ?><?= $row['id_detail']; ?>">approve
@@ -162,6 +160,7 @@
                                             <a class="btn btn-danger" href="<?= base_url('requestorder/reject_detail/'); ?><?= $row['id_detail']; ?>">reject
                                             </a>
                                         <?php endif; ?>
+                                    <?php else : ?>
                                     <?php endif; ?>
                                 </td>
                             </tr>

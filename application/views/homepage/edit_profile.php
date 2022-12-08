@@ -5,12 +5,10 @@
         <div class="card-header">
             Edit
         </div>
+        <div><?= $this->session->flashdata('msg'); ?></div>
         <div class="card-body offset-1 col-9">
             <?php foreach ($data_user as $data) : ?>
-                <?= form_open_multipart('user_mgm/update_user/') ?>
-                <?= $this->session->set_flashdata(
-                    'msg'
-                ); ?>
+                <?= form_open_multipart('home/update/' . $user['id_user']) ?>
                 <input type="hidden" id="id" name="id" value="<?= $data['id_user']; ?>" readonly>
                 <div class="form-group row">
                     <input type="text" class="form-control form-control-user" id="nama" name="nama" placeholder="Full Name" value="<?= $data['nama']; ?>">
@@ -62,7 +60,7 @@
                         Simpan Data
                     </button>
                     <br>
-                    <a class="btn btn-secondary btn-block" href="<?= base_url('user_mgm'); ?>" role="button">Kembali</a>
+                    <a class="btn btn-secondary btn-block" href="<?= base_url('home'); ?>" role="button">Kembali</a>
                 </div>
             <?php endforeach; ?>
             <?= form_close(); ?>

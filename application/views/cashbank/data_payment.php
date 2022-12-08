@@ -31,8 +31,8 @@
                                     <td scope="col">Rp <?= number_format($pay['total_byr'], 2, ',', '.'); ?> </td>
                                     <td scope="col"><?= date("d F Y", strtotime($pay['tgl_byr'])); ?></td>
                                     <td scope="col">
-                                        <a class="btn btn-success fa fa-edit " href="#" role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="edit data"></a>
-                                        <a class="btn btn-danger fa fa-trash-alt" href="#" role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="hapus data"></a>
+                                        <a class="btn btn-success fa fa-edit " href="<?= base_url('cashbank/get_pay_data/' . $pay['id_byr']); ?>" role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="edit data"></a>
+                                        <a class="btn btn-danger fa fa-trash-alt" href="<?= base_url('cashbank/delete_pay/' . $pay['id_byr']); ?>" role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="hapus data"></a>
                                         <a class="btn btn-warning fa fa-file-pdf" href="<?= base_url('cashbank/download_bukti/' . $pay['id_byr']); ?>" role="button" data-bs-toggle="tooltip" data-bs-placement="top" title="download bukti"></a>
                                     </td>
                                 </tr>

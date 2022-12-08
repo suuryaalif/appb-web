@@ -6,61 +6,54 @@
     <!-- Page Body -->
     <div class="card text-start">
         <div class="row p-2">
-            <div class="col-md-10 mt-2 offset-md-10">
-                <!-- Button trigger modal -->
-                <a name="adduser" id="adduser" class="btn btn-primary" href="user_mgm/user_add_form" role="button">Tambah User</a>
-            </div>
-            <!-- Modal trigger button -->
-        </div>
-        <div class="card-body">
-            <div><?= $this->session->flashdata('msg'); ?></div>
-            <div class="table-responsive-md">
-                <table class="table table-responsive-sm table-bordered" id="">
-                    <thead align=center>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Email</th>
-                            <th>No. Handphone</th>
-                            <th>Hak Akses</th>
-                            <th>Divisi</th>
-                            <th hidden></th>
-                            <th hidden></th>
-                            <th hidden></th>
-                        </tr>
-                    </thead>
-                    <tbody align=center>
-                        <?php $no = 0;
-                        foreach ($user_data as $row) :
-                            $no++;
-                        ?>
+            <div class="card-body">
+                <div><?= $this->session->flashdata('msg'); ?></div>
+                <div class="table-responsive-md">
+                    <table class="table table-responsive-sm table-bordered" id="datatable">
+                        <thead align=center>
                             <tr>
-                                <td><?= $no ?></td>
-                                <td><?= $row['nama'] ?></td>
-                                <td><?= $row['email'] ?></td>
-                                <td><?= $row['no_hp'] ?></td>
-                                <td><?= $row['role user'] ?></td>
-                                <td><?= $row['divisi'] ?></td>
-                                <td>
-                                    <button type="button" class="btn btn-info fa fa-eye" data-toggle="modal" data-target="#detailUser<?= $row['id_user'] ?>">
-                                        lihat
-                                    </button>
-                                </td>
-                                <td>
-                                    <a class="btn btn-success" href="<?= base_url('') ?>user_mgm/edit_user/<?= $row['id_user']; ?>" role="button"><i class="fa fa-edit"></i> edit</a>
-                                </td>
-                                <td>
-                                    <a class="btn btn-danger" href="<?= base_url(''); ?>user_mgm/delete_user/<?= $row['id_user']; ?>" role="button"><i class="fa fa-trash-alt"></i> hapus</a>
-                                </td>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>No. Handphone</th>
+                                <th>Hak Akses</th>
+                                <th>Divisi</th>
+                                <th hidden></th>
+                                <th hidden></th>
+                                <th hidden></th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody align=center>
+                            <?php $no = 0;
+                            foreach ($user_data as $row) :
+                                $no++;
+                            ?>
+                                <tr>
+                                    <td><?= $no ?></td>
+                                    <td><?= $row['nama'] ?></td>
+                                    <td><?= $row['email'] ?></td>
+                                    <td><?= $row['no_hp'] ?></td>
+                                    <td><?= $row['role user'] ?></td>
+                                    <td><?= $row['divisi'] ?></td>
+                                    <td>
+                                        <button type="button" class="btn btn-info fa fa-eye" data-toggle="modal" data-target="#detailUser<?= $row['id_user'] ?>" data-bs-toggle="tooltip" title="lihat detail">
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-success" href="<?= base_url('') ?>user_mgm/edit_user/<?= $row['id_user']; ?>" role="button"><i class="fa fa-edit" data-bs-toggle="tooltip" title="edit data user"></i></a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-danger" href="<?= base_url(''); ?>user_mgm/delete_user/<?= $row['id_user']; ?>" role="button" data-bs-toggle="tooltip" title="hapus data user"><i class="fa fa-trash-alt"></i></a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- /.container-fluid -->
+    <!-- /.container-fluid -->
 
 </div>
 <!-- End of Main Content -->

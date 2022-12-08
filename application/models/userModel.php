@@ -5,7 +5,13 @@ class userModel extends CI_Model
 {
     public function get_user_session()
     {
-        return $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $this->db->select('*');
+        $this->db->from('user');
+        $this->db->join('role', 'role.id_role = user.role_id');
+        $this->db->join('divisi', 'divisi.div_id = user.id_divisi');
+        $this->db->where('email', $this->session->userdata('email'));
+        return $this->db->get()->row_array();
+        // return $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
     }
 
     public function get_user_info($email)

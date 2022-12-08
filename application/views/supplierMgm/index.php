@@ -5,15 +5,15 @@
     <h1 class="h3 mb-4 ml-5 text-gray-800">Data Supplier</h1>
     <!-- Page Body -->
     <div class="card">
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-10 mt-2 offset-md-10">
-                <a class="btn btn-primary" href="<?= base_url('Sup_mgm/new_form') ?>" role="button">Tambah Supplier</a>
+                <a class="btn btn-primary"  role="button">Tambah Supplier</a>
             </div>
-        </div>
+        </div> -->
         <div><?= $this->session->flashdata('msg'); ?></div>
         <div class="card-body">
             <div class="table-responsive-lg">
-                <table class="table table-light" id="datatable">
+                <table class="table table-light table-bordered table-striped" id="datatable">
                     <thead>
                         <tr>
                             <th scope="col">No</th>
@@ -34,15 +34,14 @@
                         ?>
                             <tr class="">
                                 <td scope="row"><?= $no ?></td>
+                                <td><?= $dt['id_sup']; ?></td>
                                 <td><?= $dt['nama_sup']; ?></td>
                                 <td><?= $dt['pic_sup']; ?></td>
                                 <td><?= $dt['email_sup']; ?></td>
                                 <td><?= $dt['tlp_sup']; ?></td>
-                                <td><button type="button" class="btn btn-info fa fa-eye" data-toggle="modal" data-target="#detailSupplier<?= $dt['id_sup'] ?>">
-                                        lihat
-                                    </button></td>
-                                <td><a class="btn btn-success fa fa-edit" href="<?= base_url('sup_mgm/edit/' . $dt['id_sup']); ?>" role="button"> edit</a></td>
-                                <td><a class="btn btn-danger fas fa-trash-alt" href="<?= base_url('sup_mgm/delete/' . $dt['id_sup']); ?>" role="button"> Hapus</a></td>
+                                <td><button type="button" class="btn btn-info fa fa-eye" data-toggle="modal" data-target="#detailSupplier<?= $dt['id_sup'] ?>"></button></td>
+                                <td><a class="btn btn-success fa fa-edit" href="<?= base_url('sup_mgm/edit/' . $dt['id_sup']); ?>" role="button"></a></td>
+                                <td><a class="btn btn-danger fas fa-trash-alt" href="<?= base_url('sup_mgm/delete/' . $dt['id_sup']); ?>" role="button"></a></td>
                             </tr>
                     </tbody>
                 <?php endforeach; ?>

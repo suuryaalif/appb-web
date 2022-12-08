@@ -105,6 +105,12 @@ class cashbankModel extends CI_Model
         $this->db->insert('pembayaran', $data);
     }
 
+    public function update_pay($id, $data)
+    {
+        $this->db->where('id_byr', $id);
+        $this->db->update('pembayaran', $data);
+    }
+
     public function update($id, $data)
     {
         $this->db->where('id_cbr', $id);
@@ -115,6 +121,12 @@ class cashbankModel extends CI_Model
     {
         $this->db->where('id_cbr', $id);
         $this->db->delete('cashbank_requestion');
+    }
+
+    public function delete_pay($id)
+    {
+        $this->db->where('id_byr', $id);
+        $this->db->delete('pembayaran');
     }
 
     public function approve($id)
@@ -144,6 +156,14 @@ class cashbankModel extends CI_Model
 
         $this->db->where('id_cbr', $id);
         $this->db->set('status_cbr', 10);
+        $this->db->update('cashbank_requestion');
+    }
+
+    public function reverse_confirm($kode)
+    {
+
+        $this->db->where('kode_cbr', $kode);
+        $this->db->set('status_cbr', 9);
         $this->db->update('cashbank_requestion');
     }
 

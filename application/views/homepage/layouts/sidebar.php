@@ -6,7 +6,7 @@
         <img class="img-profile" src="<?= base_url('assets'); ?>/img/logo/logo.png">
     </a>
     <a class="sidebar-brand d-block align-items-center justify-content-center">
-        <div class="sidebar-brand-text mx-2">APPBweb</div>
+        <div class="sidebar-brand-text mx-3">APPBweb</div>
     </a>
 
     <!-- Divider -->
@@ -53,9 +53,9 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a class="collapse-item" href=" <?= base_url('cashbank'); ?>">Data Cash Bank Requestion</a>
                     <?php if ($this->session->userdata('role_id') == '4') : ?>
-                        <a class="collapse-item" href="<?= base_url('cashbank/get_pay_data'); ?>" id="newrequest">Payment Transaction</a>
+                        <a class="collapse-item" style="font-size:13px ;" href="<?= base_url('cashbank/get_pay_data'); ?>" id="newrequest">Data Transaction</a>
                     <?php elseif ($this->session->userdata('role_id') == '1') : ?>
-                        <a class="collapse-item" href=" <?= base_url('cashbank/get_form_create'); ?>">New Cashbank Requestion</a>
+                        <a class="collapse-item" style="font-size:13px ;" href=" <?= base_url('cashbank/get_form_create'); ?>">Create Cash Bank Requestion</a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -73,7 +73,7 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePurchase" aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-boxes"></i>
+                <i class="fas fa-shopping-basket "></i>
                 <span>Purchase Order</span>
             </a>
             <div id="collapsePurchase" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -83,22 +83,43 @@
                 </div>
             </div>
         </li>
-
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('home'); ?>">
-                <i class="fas fa-shopping-basket"></i>
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseitem" aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-boxes"></i>
                 <span>Item Management</span></a>
+            </a>
+            <div id="collapseitem" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="<?= base_url('user_mgm'); ?>">Data Item</a>
+                    <a class="collapse-item" href="user_mgm/user_add_form">Add Item</a>
+                </div>
+            </div>
         </li>
-
+        <!---->
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('sup_mgm'); ?>">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsesupplier" aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-user-friends"></i>
-                <span>Supplier Management</span></a>
+                <span>Supplier Management</span>
+            </a>
+            <div id="collapsesupplier" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="<?= base_url('sup_mgm'); ?>">Data Supplier</a>
+                    <a class="collapse-item" href="<?= base_url('Sup_mgm/new_form') ?>">Create Supplier</a>
+                </div>
+            </div>
         </li>
+        <!---->
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('user_mgm'); ?>">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseuser" aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-users"></i>
                 <span>User Management</span></a>
+            </a>
+            <div id="collapseuser" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="<?= base_url('user_mgm'); ?>">Data User</a>
+                    <a class="collapse-item" href="user_mgm/user_add_form">Create User</a>
+                </div>
+            </div>
         </li>
     <?php endif; ?>
 

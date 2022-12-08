@@ -60,19 +60,33 @@ class Cashbank extends CI_Controller
         $this->load->view('homepage/layouts/footer', $data);
     }
 
-    public function get_pay_data()
+    public function get_pay_data($id = null)
     {
-        $data = [
-            'title' => 'Data Pembayaran',
-            'user' => $this->userModel->get_user_session(),
-            'payment' => $this->cashbankModel->get_pay()
-        ];
+        if ($id != null) {
+            $data = [
+                'title' => 'Data Pembayaran',
+                'user' => $this->userModel->get_user_session(),
+                'payment' => $this->cashbankModel->get_pay($id)
+            ];
 
-        $this->load->view('homepage/layouts/header', $data);
-        $this->load->view('homepage/layouts/sidebar', $data);
-        $this->load->view('homepage/layouts/topbar', $data);
-        $this->load->view('cashbank/data_payment', $data);
-        $this->load->view('homepage/layouts/footer', $data);
+            $this->load->view('homepage/layouts/header', $data);
+            $this->load->view('homepage/layouts/sidebar', $data);
+            $this->load->view('homepage/layouts/topbar', $data);
+            $this->load->view('cashbank/edit_pay', $data);
+            $this->load->view('homepage/layouts/footer', $data);
+        } else {
+            $data = [
+                'title' => 'Data Pembayaran',
+                'user' => $this->userModel->get_user_session(),
+                'payment' => $this->cashbankModel->get_pay()
+            ];
+
+            $this->load->view('homepage/layouts/header', $data);
+            $this->load->view('homepage/layouts/sidebar', $data);
+            $this->load->view('homepage/layouts/topbar', $data);
+            $this->load->view('cashbank/data_payment', $data);
+            $this->load->view('homepage/layouts/footer', $data);
+        }
     }
 
 
@@ -235,6 +249,28 @@ class Cashbank extends CI_Controller
         }
     }
 
+    public function delete_pay($id)
+    {
+        $row_byr = $this->db->get_where('pembayaran', array('id_byr' => $id))->row_array();
+        $kode_cbr = $row_byr['kode_cbr'];
+        $bukti = $row_byr['bukti_byr'];
+
+        // var_dump($kode_cbr);
+        // die;
+        $path = './assets/img/foto-bayar/' . $bukti;
+        unlink($path);
+
+        $this->cashbankModel->delete_pay($id);
+        $this->cashbankModel->reverse_confirm($kode_cbr);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Data dihapus !</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+        redirect('cashbank/get_pay_data');
+    }
+
     public function approve($id)
     {
 
@@ -282,10 +318,6 @@ class Cashbank extends CI_Controller
                 'cashbank' => $status,
             ];
 
-
-            // var_dump($data);
-            // die;
-
             $this->load->view('homepage/layouts/header', $data);
             $this->load->view('homepage/layouts/sidebar', $data);
             $this->load->view('homepage/layouts/topbar', $data);
@@ -294,13 +326,8 @@ class Cashbank extends CI_Controller
         }
     }
 
-    public function save_confirm()
+    public function save_confirm($id = null, $kode_ro = null, $kode_po = null)
     {
-        $id_cbr = $this->uri->segment(3);
-        $kode_ro = $this->uri->segment(4);
-        $kode_po = $this->uri->segment(5);
-        $back = $id_cbr . '/' . $kode_ro . '/' . $kode_po;
-
         //konfigurasi sebelum gambar diupload
         $config['upload_path'] = './assets/img/foto-bayar/';
         $config['allowed_types'] = 'jpg|png|jpeg';
@@ -310,33 +337,84 @@ class Cashbank extends CI_Controller
         $config['file_name'] = 'img-paid-' . date('dmY_His') . '.jpg';
         $this->load->library('upload', $config);
 
-        if (!$this->upload->do_upload('bukti_byr')) {
-            $error_msg = $this->upload->display_errors();
-            $this->session->set_flashdata('error', '
+        if ($kode_ro == null and $kode_po == null) {
+            $id_pay = $this->uri->segment(3);
+            if (!$this->upload->do_upload('bukti_byr')) {
+                $error_msg = $this->upload->display_errors();
+                $this->session->set_flashdata('error', '
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>' . $error_msg . '</strong>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button></div>');
-            redirect('cashbank/get_form_confirm/' . $back, $error_msg);
+                redirect('cashbank/get_pay_data/' . $id_pay, $error_msg);
+            } else {
+
+                $prev_bukti = $this->db->select('bukti_byr')->from('pembayaran')->where('id_byr', $id)->get()->row_array();
+                $prev = $prev_bukti['bukti_byr'];
+                $path = './assets/img/foto-bayar/' . $prev;
+                unlink($path);
+
+                $image = $this->upload->data();
+                $gambar = $image['file_name'];
+                $data = [
+                    'kode_byr' => $this->input->post('kode_byr', true),
+                    'kode_cbr' => $this->input->post('kode_cbr', true),
+                    'total_byr' => $this->input->post('total_byr', true),
+                    'tgl_byr' => $this->input->post('tgl_byr', true),
+                    'bukti_byr' => $gambar
+                ];
+
+                $this->cashbankModel->update_pay($id_pay, $data);
+                $this->session->set_flashdata('msg', '
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <strong>Data Berhasil Diubah</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button></div>');
+                redirect('cashbank/get_pay_data');
+            }
         } else {
-            $image = $this->upload->data();
-            $gambar = $image['file_name'];
+            $id_cbr = $this->uri->segment(3);
+            $kode_ro = $this->uri->segment(4);
+            $kode_po = $this->uri->segment(5);
+            $back = $id_cbr . '/' . $kode_ro . '/' . $kode_po;
 
-            $data = [
-                'kode_byr' => $this->input->post('kode_byr', true),
-                'kode_cbr' => $this->input->post('kode_cbr', true),
-                'total_byr' => $this->input->post('total_byr', true),
-                'tgl_byr' => $this->input->post('tgl_byr', true),
-                'bukti_byr' => $gambar
-            ];
+            if (!$this->upload->do_upload('bukti_byr')) {
+                $error_msg = $this->upload->display_errors();
+                $this->session->set_flashdata('error', '
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>' . $error_msg . '</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button></div>');
+                redirect('cashbank/get_form_confirm/' . $back, $error_msg);
+            } else {
+                $image = $this->upload->data();
+                $gambar = $image['file_name'];
 
-            $this->cashbankModel->add_pay($data);
-            $this->cashbankModel->set_confirm($id_cbr);
+                $data = [
+                    'kode_byr' => $this->input->post('kode_byr', true),
+                    'kode_cbr' => $this->input->post('kode_cbr', true),
+                    'total_byr' => $this->input->post('total_byr', true),
+                    'tgl_byr' => $this->input->post('tgl_byr', true),
+                    'bukti_byr' => $gambar
+                ];
 
-            redirect('cashbank');
+                $this->cashbankModel->add_pay($data);
+                $this->cashbankModel->set_confirm($id_cbr);
+                $this->session->set_flashdata('msg', '
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Konfirmasi Pembayaran Berhasil</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button></div>');
+                redirect('cashbank');
+            }
         }
     }
+
+
 
     public function save_pdf()
     {
