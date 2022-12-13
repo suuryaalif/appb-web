@@ -121,6 +121,32 @@
                 </div>
             </div>
         </li>
+        <!---->
+        <!--Dibawah Ini adalah menu untuk cetak laporan dengan bantuan filterisasi-->
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Report Menu :
+        </div>
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsereport" aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-file"></i>
+                <span>Report Management</span></a>
+            </a>
+            <div id="collapsereport" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="<?= base_url('report/ro_filter'); ?>">Request Order</a>
+                    <a class="collapse-item" href="">Purchase Order</a>
+                    <a class="collapse-item" href="">Cashbank</a>
+                    <a class="collapse-item" href="">Item</a>
+                    <a class="collapse-item" href="">Supplier</a>
+                    <a class="collapse-item" href="">User</a>
+                </div>
+            </div>
+        </li>
     <?php endif; ?>
 
     <!-- Divider -->
