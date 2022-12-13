@@ -90,8 +90,8 @@
             </a>
             <div id="collapseitem" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="<?= base_url('user_mgm'); ?>">Data Item</a>
-                    <a class="collapse-item" href="user_mgm/user_add_form">Add Item</a>
+                    <a class="collapse-item" href="<?= base_url('item'); ?>">Data Item</a>
+                    <a class="collapse-item" href="<?= base_url('item/add'); ?>">Add Item</a>
                 </div>
             </div>
         </li>

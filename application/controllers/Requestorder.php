@@ -518,6 +518,31 @@ class Requestorder extends CI_Controller
         </button></div>');
         redirect('requestorder');
     }
+    //fungsi untuk user requestion konfirmasi terima barang
+    public function terima_barang($id)
+    {
+        $this->requestModel->confirm_terima($id);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Konfirmasi Terima Barang Berhasil.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+        redirect('requestorder');
+    }
+
+    //fungsi untuk admin purchasing konfirmasi selesai
+    public function selesai($id)
+    {
+        $this->requestModel->confirm_selesai($id);
+        $this->session->set_flashdata('msg', '
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Konfirmasi Penyelesaian Permintaan Berhasil.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button></div>');
+        redirect('requestorder');
+    }
     //============================================================QQ==============//
     //===========================SAVE/INSERT======================================//
     //funsi ini buat masukin inputan request_order

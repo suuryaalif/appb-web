@@ -109,7 +109,14 @@ class Home extends CI_Controller
             $this->load->view('homepage/layouts/footer', $data);
         } else {
             if (!$this->upload->do_upload('img_profile')) {
-                echo "gagal upload";
+                $error_msg = $this->upload->display_errors();
+                $this->session->set_flashdata('msg', '
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>' . $error_msg . '</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button></div>');
+                redirect('home/edit/' . $id, $error_msg);
             } else {
                 if ($prev == 'default.jpg') {
                     $image = $this->upload->data();
@@ -131,7 +138,7 @@ class Home extends CI_Controller
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button></div>');
-                    redirect('home/edit/' . $id);
+                    redirect('home/profile');
                 } else {
                     unlink($path);
                     $image = $this->upload->data();
@@ -153,7 +160,7 @@ class Home extends CI_Controller
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button></div>');
-                    redirect('home/edit/' . $id);
+                    redirect('home/profile');
                 }
             }
         }

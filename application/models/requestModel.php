@@ -318,4 +318,17 @@ class requestModel extends CI_Model
         $this->db->from('request');
         return $this->db->get()->row($field);
     }
+
+    public function confirm_terima($id)
+    {
+        $this->db->set('status_pengajuan', 7);
+        $this->db->where('id_ro', $id);
+        $this->db->update('request_order');
+    }
+    public function confirm_selesai($id)
+    {
+        $this->db->set('status_pengajuan', 8);
+        $this->db->where('id_ro', $id);
+        $this->db->update('request_order');
+    }
 }

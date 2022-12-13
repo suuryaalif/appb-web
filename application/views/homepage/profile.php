@@ -4,6 +4,7 @@
     <!-- Page Heading -->
     <h1 class="h3 mb-4 ml-5 text-gray-800">Profil Data <?= $user['nama']; ?></h1>
     <!-- Page Body -->
+    <div><?= $this->session->flashdata('msg'); ?></div>
     <div class="container-fluid">
         <div class="card mb-3 shadow" style="max-width: 540px;">
             <div class="row g-0">
